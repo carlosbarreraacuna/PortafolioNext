@@ -3,6 +3,7 @@ import Link from "next/link";
 import { useState } from "react";
 import Image from "next/image";
 import NavLink from "./navLink";
+import {motion} from "framer-motion";
 
 
 {/* LINKS PARA ACCEDER A LOS DIFERENTES APARTADOS DE LA LISTA DEL MENU */ }
@@ -16,7 +17,64 @@ const links = [
 const Navbar = () => {
 
   {/* OPEN COMIENZA EN FALSE Y SET OPEN AL SER ACCIONADO ACCIONA EL BOTON PARA DESPLEGAR EL MENU RESPONSIVE AL SER ACCIONADO */ }
-  const [open, setOpen] = useState(false)
+  const [open, setOpen] = useState(false);
+
+   {/* TOP VARIANTS PARA HACER EL ICONO DE CERRAR NAVBAR AL MOMENTO EN EL QUE ESTA RESPONSIVE */ }
+  const topVariatns={
+    closed:{
+      rotate:0,
+    },
+    opened:{
+      rotate:45,
+      backgroundColor:"rgb(255,255,255)"
+    }
+  }
+
+  const centerVariatns={
+    closed:{
+      opacity:1,
+    },
+    opened:{
+      opacity:0,
+     
+    }
+  }
+
+  const bottomVariatns={
+    closed:{
+      rotate:0,
+    },
+    opened:{
+      rotate:-45,
+      backgroundColor:"rgb(255,255,255)"
+    }
+  }
+
+  {/* Animaciones para la lista del navbar responsive (Animaciones laterales) */}
+  const listVariatns={
+    closed:{
+      x: "100vw", 
+    },
+    opened:{
+      x: 0,
+      transition: {
+        when:"beforeChildren",
+        staggerChildren:0.2,
+      }
+    }
+  }
+  
+  {/* Animacion para la lista del navbar responsive (listado de opciones) */}
+  const listItemVariants={
+    closed:{
+      x: -10, 
+      opacity:0,
+    },
+    opened:{
+      x: 0,
+      opacity:1,
+    }
+  }
 
 
   return (
@@ -58,19 +116,21 @@ const Navbar = () => {
         {/* BOTON MENU RESPONSIVE */}
         <button className="relative z-50 flex flex-col justify-between w-10 h-8"
           onClick={(() => setOpen(prev => !prev))}>   {/* CONTROLA EL COMPORTAMIENTO DEL BOTON AL SER ACCIONADO */}
-          <div className="w-10 h-1 bg-white rounded" ></div>
-          <div className="w-10 h-1 bg-white rounded" ></div>
-          <div className="w-10 h-1 bg-white rounded" ></div>
+          <motion.div variants={topVariatns}  animate={open ? "opened" : "closed"} className="w-10 h-1 origin-left bg-black rounded" ></motion.div>
+          <motion.div variants={centerVariatns} animate={open ? "opened" : "closed"} className="w-10 h-1 bg-black rounded" ></motion.div>
+          <motion.div variants={bottomVariatns} animate={open ? "opened" : "closed"} className="w-10 h-1 origin-left bg-black rounded" ></motion.div>
         </button>
         {/* LISTA DEL MENU */}
         {open && (
 
-          <div className="absolute top-0 left-0 flex flex-col items-center justify-center w-screen h-screen gap-8 text-4xl text-white bg-black">
+          <motion.div variants={listVariatns} initial="closed" animate="opened" className="absolute top-0 left-0 z-40 flex flex-col items-center justify-center w-screen h-screen gap-8 text-4xl text-white bg-black">
             {/* LINKS PARA ACCEDER AL MENU DE NAVEGACION EN EL MOMENTO EN QUE ESTA RESPONSIVE */}
             {links.map(link => (
-              <Link href={link.url} key={link.title}>{link.title}</Link>
+              <motion.div variants={listItemVariants} className="" key={link.title}>
+              <Link href={link.url}>{link.title}</Link>
+              </motion.div>
             ))}
-          </div>
+          </motion.div>
         )}
 
       </div>
