@@ -11,7 +11,7 @@ const Home = () => {
   return <div className="flex flex-col h-full px-4 text-xl lg:flex-row sm:px-8 md:px-12 lg:px-20 xl:px-48">
   {/* IMAGE CONTAINER */ }
   <div className="relative h-1/2 lg:h-full lg:w-1/2">
-    <Image src="/imagen.jpg" alt="" fill className="object-contain"/>
+    <Image src="/perfil.png" alt="" fill className="object-contain"/>
   </div>
   {/* TEXT CONTAINER */ }
   <div className="flex flex-col items-center justify-center gap-8 lg:h-full lg:w-1/2 h-1/2">
@@ -22,7 +22,7 @@ const Home = () => {
      {/* BOTONES */ }
     <div className="flex w-full gap-4">
       <button className="p-4 text-white bg-black rounded-lg ring-1 ring-black">Conoceme</button>
-      <button className="p-4 rounded-lg ring-1 ring-black">Contactame</button>
+      <button className="p-4 text-black rounded-lg ring-1 ring-black">Contactame</button>
     </div>
   </div>
   </div>
