@@ -1,4 +1,7 @@
+"use client"
+
 import Image from "next/image";
+import {motion} from "framer-motion";
 // export default function Home() {
 //   return (
 //     <main className="flex flex-col items-center justify-between min-h-screen p-24">
@@ -8,7 +11,10 @@ import Image from "next/image";
 // }
 
 const Home = () => {
-  return <div className="flex flex-col h-full px-4 text-xl lg:flex-row sm:px-8 md:px-12 lg:px-20 xl:px-48">
+  return ( 
+  <motion.div className="h-full" initial={{y:"-200vh"}} animate={{y:"0%"}} transition={{duration:1}}>
+    
+  <div className="flex flex-col h-full px-4 text-xl lg:flex-row sm:px-8 md:px-12 lg:px-20 xl:px-48">
   {/* IMAGE CONTAINER */ }
   <div className="relative h-1/2 lg:h-full lg:w-1/2">
     <Image src="/perfil.png" alt="" fill className="object-contain"/>
@@ -26,7 +32,8 @@ const Home = () => {
     </div>
   </div>
   </div>
-}
+  </motion.div>
+)}
 
 export default Home ; 
 
