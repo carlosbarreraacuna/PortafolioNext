@@ -274,7 +274,7 @@ const About = () => {
                 {/* <div className="sticky top-0 z-30 hidden w-1/3 lg:block xl:w-1/2" ref={mountRef}>
                     <img src="/foto.png" alt="Descripción de la imagen" />
                 </div> */}
-                <div className="sticky top-0 z-30 hidden w-1/3 lg:block xl:w-1/2" ref={mountRef}>
+                <div className="sticky top-0 z-30 hidden w-1/3 lg:block xl:w-1/2">
                     {/* El renderizador de Three.js se montará aquí */}{/* <img src="/foto.png" alt="Descripción de la imagen" /> */}
                 </div>
 
