@@ -6,7 +6,6 @@ import { useRef } from "react"
 const About = () => {
 
     const containerRef = useRef();
-    
     const { scrollYProgress } = useScroll({ container: containerRef });
 
     //Movimientos para el titulo y la lista de habilidades
@@ -270,16 +269,17 @@ const About = () => {
                             <div className="w-1/3 "></div>
                         </div>
                     </div>
+                </div>
 
-
+                {/* <div className="sticky top-0 z-30 hidden w-1/3 lg:block xl:w-1/2" ref={mountRef}>
+                    <img src="/foto.png" alt="Descripción de la imagen" />
+                </div> */}
+                <div className="sticky top-0 z-30 hidden w-1/3 lg:block xl:w-1/2" ref={mountRef}>
+                    {/* El renderizador de Three.js se montará aquí */}{/* <img src="/foto.png" alt="Descripción de la imagen" /> */}
                 </div>
 
             </div>
-            
 
-            {/* <div className="sticky top-0 z-30 hidden w-1/3 lg:block xl:w-1/2">
-                <AnimatedImage scrollYProgress={scrollYProgress} />
-            </div> */}
 
 
         </motion.div >
