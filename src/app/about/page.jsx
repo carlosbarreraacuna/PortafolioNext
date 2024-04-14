@@ -1,5 +1,5 @@
 "use client"
-import AnimatedImage from "@/componentes/AnimatedImage";
+
 import { motion, useInView, useScroll } from "framer-motion"
 import { useRef } from "react"
 
