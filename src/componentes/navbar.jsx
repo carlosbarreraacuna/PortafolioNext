@@ -8,10 +8,10 @@ import {motion} from "framer-motion";
 
 {/* LINKS PARA ACCEDER A LOS DIFERENTES APARTADOS DE LA LISTA DEL MENU */ }
 const links = [
-  { url: "/", title: "Home" },
-  { url: "/about", title: "About" },
+  { url: "/", title: "Inicio" },
+  { url: "/Biografia", title: "Sobre mi" },
   { url: "/portafolio", title: "Portafolio" },
-  { url: "/contact", title: "Contacto" },
+  { url: "/contacto", title: "Contacto" },
 ];
 
 const Navbar = () => {
@@ -97,17 +97,14 @@ const Navbar = () => {
         </Link>
       </div>
        {/* LINKS ICONOS */}
-      <div className="justify-end hidden w-1/3 gap-4 just md:flex">
-        <Link href="#">
-        <Image src="/facebook.png" alt="" width={24} height={24}/> 
-        </Link>
+      <div className="justify-end hidden w-1/3 gap-4 just md:flex">        
         <Link href="https://github.com/carlosbarreraacuna">
         <Image src="/github.png" alt="" width={24} height={24}/> 
         </Link>
-        <Link href="#">
+        <Link href="https://www.linkedin.com/in/carlosbarrera2/">
         <Image src="/linkedin.png" alt="" width={24} height={24}/> 
         </Link>
-        <Link href="#">
+        <Link href="https://www.instagram.com/karliii05/">
         <Image src="/instagram.png" alt="" width={24} height={24}/> 
         </Link>
         

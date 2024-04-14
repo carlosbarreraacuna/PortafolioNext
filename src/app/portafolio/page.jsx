@@ -83,14 +83,14 @@ const PortfolioPage = () => {
           </motion.div>
         </div>
       </div>
-      <div className="flex flex-col items-center justify-center w-screen h-screen gap-16 text-center">
-        <h1 className="text-8xl">¿Tienes un proyecto?</h1>
+      <div className="flex flex-col items-center justify-center w-screen h-screen gap-16 text-center bg-white">
+        <h1 className="text-black text-8xl">¿Tienes un proyecto?</h1>
         <div className="relative">
           <motion.svg
             animate={{ rotate: 360 }}
             transition={{ duration: 8, ease: "linear", repeat: Infinity }}
             viewBox="0 0 300 300"
-            className="w-64 h-64 md:w-[500px] md:h-[500px] "
+            className="w-64 h-64 md:w-[500px] md:h-[500px] text-black"
           >
             <defs>
               <path
@@ -99,13 +99,13 @@ const PortfolioPage = () => {
               />
             </defs>
             <text fill="#000">
-              <textPath xlinkHref="#circlePath" className="text-xl">
-                Front-end Developer
+              <textPath xlinkHref="#circlePath" className="text-xl text-black">
+                Desarrollador  Front-End  &  Back-End
               </textPath>
             </text>
           </motion.svg>
           <Link
-            href="/contact"
+            href="/contacto"
             className="absolute top-0 bottom-0 left-0 right-0 flex items-center justify-center w-16 h-16 m-auto text-white bg-black rounded-full md:w-28 md:h-28"
           >
             Contactame
