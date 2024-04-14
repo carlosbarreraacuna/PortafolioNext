@@ -8,15 +8,15 @@ const items = [
   {
     id: 1,
     color: "from-red-300 to-blue-300",
-    title: "React Commerce",
-    desc: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolores ab id ad nesciunt quo aut corporis modi? Voluptate, quos sunt dolorum facilis, id eum sequi placeat accusantium saepe eos laborum.",
-    img: "https://images.pexels.com/photos/18073372/pexels-photo-18073372/free-photo-of-young-man-sitting-in-a-car-on-a-night-street.jpeg?auto=compress&cs=tinysrgb&w=1600&lazy=load",
+    title: "Sistema de atencion Psicologica",
+    desc: "•	Lenguajes utilizados (PHP) – Framework (Laravel, Liveware, Codeigneiter 3) \n •	Desarrollo del software SAP (Sistema de atención psicológica) •	Manejo de control de versiones Git, Gitlab.",
+    img: "/sap.png",
     link: "https://lama.dev",
   },
   {
     id: 2,
     color: "from-blue-300 to-violet-300",
-    title: "Next.js Medium Blog",
+    title: "Landing Page",
     desc: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolores ab id ad nesciunt quo aut corporis modi? Voluptate, quos sunt dolorum facilis, id eum sequi placeat accusantium saepe eos laborum.",
     img: "https://images.pexels.com/photos/18023772/pexels-photo-18023772/free-photo-of-close-up-of-a-person-holding-a-wristwatch.jpeg?auto=compress&cs=tinysrgb&w=1600&lazy=load",
     link: "https://lama.dev",
@@ -65,7 +65,7 @@ const PortfolioPage = () => {
                 key={item.id}
               >
                 <div className="flex flex-col gap-8 text-white">
-                  <h1 className="text-xl font-bold md:text-4xl lg:text-6xl xl:text-8xl">
+                  <h1 className="text-xl font-bold md:text-2xl lg:text-4xl xl:text-6xl">
                     {item.title}
                   </h1>
                   <div className="relative w-80 h-56 md:w-96 md:h-64 lg:w-[500px] lg:h-[350px] xl:w-[600px] xl:h-[420px]">

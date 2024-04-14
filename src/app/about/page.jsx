@@ -1,8 +1,13 @@
 "use client"
-import { motion, useInView } from "framer-motion"
+import AnimatedImage from "@/componentes/AnimatedImage";
+import { motion, useInView, useScroll } from "framer-motion"
 import { useRef } from "react"
 
 const About = () => {
+
+    const containerRef = useRef();
+    
+    const { scrollYProgress } = useScroll({ container: containerRef });
 
     //Movimientos para el titulo y la lista de habilidades
     const skillRef = useRef()
@@ -23,7 +28,7 @@ const About = () => {
             transition={{ duration: 1 }}>
 
             {/* {CONTAINER} */}
-            <div className="h-full overflow-scroll lg:flex">
+            <div className="h-full overflow-scroll lg:flex" ref={containerRef}>
 
                 {/* {TEXT CONTAINER} */}
                 <div className="flex flex-col gap-24 p-4 text-black sm:p-8 md:p-12 lg:p-20 xl:p-48 md:gap-32 lg:gap-48 xl:gap-64 lg:w-2/3 lg:pr-0 xl:w-1/2">
@@ -271,11 +276,17 @@ const About = () => {
 
             </div>
             {/* svg container */}
-            <div className="sticky top-0 z-30 hidden w-1/3 lg:block xl:w-1/2"></div>
+            <div className="sticky top-0 z-30 hidden w-1/3 lg:block xl:w-1/2">
+                <AnimatedImage/>
+            </div>
 
+            {/* <div className="sticky top-0 z-30 hidden w-1/3 lg:block xl:w-1/2">
+                <AnimatedImage scrollYProgress={scrollYProgress} />
+            </div> */}
 
 
         </motion.div >
+
     )
 }
 
