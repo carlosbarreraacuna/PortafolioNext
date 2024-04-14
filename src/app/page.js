@@ -26,7 +26,7 @@ const Home = () => {
         {/* TEXT CONTAINER */}
         <div className="flex flex-col items-center justify-center gap-8 lg:h-full lg:w-1/2 h-1/2">
           {/* TITULO */}
-          <hi className="text-4xl font-bold text-black md:text-6xl">
+          <hi className="pt-10 text-4xl font-bold text-black md:text-6xl">
             INGENIERO DE SISTEMAS
           </hi>
           {/* DESCRIPCION */}
