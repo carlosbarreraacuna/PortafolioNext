@@ -275,10 +275,7 @@ const About = () => {
                 </div>
 
             </div>
-            {/* svg container */}
-            <div className="sticky top-0 z-30 hidden w-1/3 lg:block xl:w-1/2">
-                <AnimatedImage/>
-            </div>
+            
 
             {/* <div className="sticky top-0 z-30 hidden w-1/3 lg:block xl:w-1/2">
                 <AnimatedImage scrollYProgress={scrollYProgress} />
