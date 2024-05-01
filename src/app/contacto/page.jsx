@@ -74,7 +74,7 @@ const ContactPage = () => {
             className="bg-transparent border-b-2 outline-none resize-none border-b-black"
             name="user_message"
           placeholder="Escribe un mensaje aqui"/>
-          <span>Mi correo electronico es:</span>
+          <span>Correo electronico</span>
           <input
             name="user_email"
             type="text"
