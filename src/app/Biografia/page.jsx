@@ -59,7 +59,9 @@ const About = () => {
 
                         {/* BIOGRAPHY SIGN SVG*/}
                         <div className="self-end">
-                            <svg
+                            <img src="/Carlos_Barrera_firma.png" alt="" />
+                            
+                            {/* <svg
                                 width="185"
                                 height="77"
                                 viewBox="0 0 370 114"
@@ -71,7 +73,7 @@ const About = () => {
                                     stroke="black"
                                     strokeWidth="2"
                                 />
-                            </svg>
+                            </svg> */}
                         </div>
                         {/* BIOGRAPHY SCROLL SVG */}
                         <motion.svg
@@ -111,31 +113,45 @@ const About = () => {
                             animate={isSkillRefInView ? { x: 0 } : {}}
                             className="flex flex-wrap gap-4">
                             <div className="text-2xl font-bold">
-                                <div className="p-2 text-sm text-white bg-black rounded cursor-pointer hover:text-black hover:bg-white">HTML</div>
+                                <img src="/habilidades/html-5.png" alt="HTML" />
+                                {/* <div className="p-2 text-sm text-white bg-black rounded cursor-pointer hover:text-black hover:bg-white">HTML</div> */}
                             </div>
                             <div className="text-2xl font-bold">
-                                <div className="p-2 text-sm text-white bg-black rounded cursor-pointer hover:text-black hover:bg-white">CSS</div>
+                                <img src="/habilidades/css-3.png" alt="CSS" />
+                                {/* <div className="p-2 text-sm text-white bg-black rounded cursor-pointer hover:text-black hover:bg-white">CSS</div> */}
                             </div>
                             <div className="text-2xl font-bold">
-                                <div className="p-2 text-sm text-white bg-black rounded cursor-pointer hover:text-black hover:bg-white">Javascript</div>
+                                <img src="/habilidades/js.png" alt="JAVASCRIPT" />
+                                {/* <div className="p-2 text-sm text-white bg-black rounded cursor-pointer hover:text-black hover:bg-white">Javascript</div> */}
                             </div>
                             <div className="text-2xl font-bold">
-                                <div className="p-2 text-sm text-white bg-black rounded cursor-pointer hover:text-black hover:bg-white">REACT JS</div>
+                                <img src="/habilidades/typescript.png" alt="TYPESCRIPT" />
+                                {/* <div className="p-2 text-sm text-white bg-black rounded cursor-pointer hover:text-black hover:bg-white">Javascript</div> */}
                             </div>
                             <div className="text-2xl font-bold">
-                                <div className="p-2 text-sm text-white bg-black rounded cursor-pointer hover:text-black hover:bg-white">NEXT JS</div>
+                            <img src="/habilidades/reactjs.png" alt="REACT JS" />
+                                {/* <div className="p-2 text-sm text-white bg-black rounded cursor-pointer hover:text-black hover:bg-white">REACT JS</div> */}
                             </div>
                             <div className="text-2xl font-bold">
-                                <div className="p-2 text-sm text-white bg-black rounded cursor-pointer hover:text-black hover:bg-white">PHP</div>
+                            <img src="/habilidades/next.png" alt="NEXT JS" />
+                                {/* <div className="p-2 text-sm text-white bg-black rounded cursor-pointer hover:text-black hover:bg-white">NEXT JS</div> */}
+                            </div>
+                            
+                            <div className="text-2xl font-bold ">
+                            <img src="/habilidades/php.png" alt="PHP" />
+                                {/* <div className="p-2 text-sm text-white bg-black rounded cursor-pointer hover:text-black hover:bg-white">PHP</div> */}
                             </div>
                             <div className="text-2xl font-bold">
-                                <div className="p-2 text-sm text-white bg-black rounded cursor-pointer hover:text-black hover:bg-white">CODEIGNEITER 3</div>
+                            <img src="/habilidades/codeigneiter3.png" alt="CODEIGNEITER" />
+                                {/* <div className="p-2 text-sm text-white bg-black rounded cursor-pointer hover:text-black hover:bg-white">CODEIGNEITER 3</div> */}
                             </div>
                             <div className="text-2xl font-bold">
-                                <div className="p-2 text-sm text-white bg-black rounded cursor-pointer hover:text-black hover:bg-white">LARAVEL</div>
+                            <img src="/habilidades/laravel.png" alt="LARAVEL" />
+                                {/* <div className="p-2 text-sm text-white bg-black rounded cursor-pointer hover:text-black hover:bg-white">LARAVEL</div> */}
                             </div>
                             <div className="text-2xl font-bold">
-                                <div className="p-2 text-sm text-white bg-black rounded cursor-pointer hover:text-black hover:bg-white">POSTGRESQL</div>
+                            <img src="/habilidades/postgresql.png" alt="postgresql" />
+                                {/* <div className="p-2 text-sm text-white bg-black rounded cursor-pointer hover:text-black hover:bg-white">POSTGRESQL</div> */}
                             </div>
                         </motion.div>
                         {/* SKILL SCROLL SVG */}
