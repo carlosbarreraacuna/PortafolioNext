@@ -9,7 +9,7 @@ import {motion} from "framer-motion";
 {/* LINKS PARA ACCEDER A LOS DIFERENTES APARTADOS DE LA LISTA DEL MENU */ }
 const links = [
   { url: "/", title: "Inicio" },
-  { url: "/Biografia", title: "Sobre mi" },
+  { url: "/Biografia", title: "Biografia" },
   { url: "/portafolio", title: "Portafolio" },
   { url: "/contacto", title: "Contacto" },
 ];
