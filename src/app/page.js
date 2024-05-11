@@ -18,10 +18,17 @@ const Home = () => {
       animate={{ y: "0%" }}
       transition={{ duration: 1 }}
     >
-      <div className="flex flex-col h-full px-4 text-xl lg:flex-row sm:px-8 md:px-12 lg:px-20 xl:px-48">
+      <div className="flex flex-col items-center justify-center h-full gap-4 px-4 text-xl lg:flex-row sm:px-8 md:px-12 lg:px-20 xl:px-48">
         {/* IMAGE CONTAINER */}
-        <div className="relative h-1/2 lg:h-full lg:w-1/2">
-          <Image src="/perfil.png" alt="" fill className="object-contain" />
+        <div className="flex flex-col items-center justify-center gap-8 mx-auto lg:h-full lg:w-1/2 h-1/2">
+          <div className="bg-transparent border-2 rounded-full vbv"> 
+            
+          <Image className="rounded-full" src="/perfil.png" 
+          alt=""
+          width={300}
+          height={300} 
+           />
+          </div>
         </div>
         {/* TEXT CONTAINER */}
         <div className="flex flex-col items-center justify-center gap-8 lg:h-full lg:w-1/2 h-1/2">
