@@ -111,36 +111,36 @@ const About = () => {
               animate={isSkillRefInView ? { x: 0 } : {}}
               className="flex flex-wrap gap-4"
             >
-              <div className="text-2xl font-bold">
-                <img src="/habilidades/html-5.png" alt="HTML" />
+              <div className="transition duration-75 ease-in-out delay-150 hover:translate-y-1 hover:scale-125">
+                <img src="/habilidades/html-5.svg" alt="HTML" />
               </div>
-              <div className="text-2xl font-bold">
-                <img src="/habilidades/css-3.png" alt="CSS" />
+              <div className="transition duration-75 ease-in-out delay-150 hover:translate-y-1 hover:scale-125">
+                <img src="/habilidades/css-3.svg" alt="CSS" />
               </div>
-              <div className="text-2xl font-bold">
-                <img src="/habilidades/js.png" alt="JAVASCRIPT" />
+              <div className="transition duration-75 ease-in-out delay-150 hover:translate-y-1 hover:scale-125">
+                <img src="/habilidades/javascript.svg" alt="JAVASCRIPT" />
               </div>
-              <div className="text-2xl font-bold">
-                <img src="/habilidades/typescript.png" alt="TYPESCRIPT" />
+              <div className="transition duration-75 ease-in-out delay-150 hover:translate-y-1 hover:scale-125">
+                <img src="/habilidades/typescript.svg" alt="TYPESCRIPT" />
               </div>
-              <div className="text-2xl font-bold">
-                <img src="/habilidades/reactjs.png" alt="REACT JS" />
+              <div className="transition duration-75 ease-in-out delay-150 hover:translate-y-1 hover:scale-125">
+                <img src="/habilidades/react.svg" alt="REACT JS" />
               </div>
-              <div className="text-2xl font-bold">
-                <img src="/habilidades/next.png" alt="NEXT JS" />
+              <div className="transition duration-75 ease-in-out delay-150 hover:translate-y-1 hover:scale-125">
+                <img src="/habilidades/next-js.svg" alt="NEXT JS" />
               </div>
 
-              <div className="text-2xl font-bold ">
-                <img src="/habilidades/php.png" alt="PHP" />
+              <div className="transition duration-75 ease-in-out delay-150 hover:translate-y-1 hover:scale-125">
+                <img src="/habilidades/php.svg" alt="PHP" />
               </div>
-              <div className="text-2xl font-bold">
-                <img src="/habilidades/codeigneiter3.png" alt="CODEIGNEITER" />
+              <div className="transition duration-75 ease-in-out delay-150 hover:translate-y-1 hover:scale-125">
+                <img src="/habilidades/codeigneiter3.svg" alt="CODEIGNEITER" />
               </div>
-              <div className="text-2xl font-bold">
-                <img src="/habilidades/laravel.png" alt="LARAVEL" />
+              <div className="transition duration-75 ease-in-out delay-150 hover:translate-y-1 hover:scale-125">
+                <img src="/habilidades/laravel.svg" alt="LARAVEL" />
               </div>
-              <div className="text-2xl font-bold">
-                <img src="/habilidades/postgresql.png" alt="POSTGRESQL" />
+              <div className="transition duration-75 ease-in-out delay-150 hover:translate-y-1 hover:scale-125">
+                <img src="/habilidades/postgresql.svg" alt="POSTGRESQL" />
               </div>
             </motion.div>
             {/* SKILL SCROLL SVG */}
