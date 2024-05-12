@@ -1,13 +1,13 @@
 "use client";
-import { motion } from "framer-motion";
+
+import Lottie from "lottie-react";
+import Animation from "../../app/prueba/Animation.json";
 import { useRef, useState } from "react";
 import emailjs from "@emailjs/browser";
 
-const ContactPage = () => {
+const contacto = () => {
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState(false);
-  const text = "Hola";
-
   const form = useRef();
 
   const sendEmail = (e) => {
@@ -32,72 +32,159 @@ const ContactPage = () => {
         }
       );
   };
-
   return (
-    <motion.div
-      className="h-full"
-      initial={{ y: "-200vh" }}
-      animate={{ y: "0%" }}
-      transition={{ duration: 1 }}
-    >
-      <div className="flex flex-col h-full px-4 lg:flex-row sm:px-8 md:px-12 lg:px-20 xl:px-48">
-        {/* TEXT CONTAINER */}
-        <div className="flex items-center justify-center text-6xl text-black h-1/2 lg:h-full lg:w-1/2">
-          <div>
-            {text.split("").map((letter, index) => (
-              <motion.span
-                key={index}
-                initial={{ opacity: 1 }}
-                animate={{ opacity: 0 }}
-                transition={{
-                  duration: 3,
-                  repeat: Infinity,
-                  delay: index * 0.1,
-                }}
-              >
-                {letter}
-              </motion.span>
-            ))}
-            😊
+    <div class=" flex justify-center h-full items-top sm:items-center sm:pt-0">
+      <div class="max-w-6xl mx-auto sm:px-6 lg:px-8">
+        <div class="h-full mt-8 overflow-hidden">
+          <div class="h-full grid grid-cols-1 md:grid-cols-2">
+            {/* contenedor de el formulario */}
+            <form onSubmit={sendEmail} ref={form} className="text-black">
+              {/* form top part containing mail icon and heading  */}
+              <div class="flex flex-col md:flex-row justify-around items-start md:items-center pt-8 p-4">
+                {/* heading  */}
+                <h2 class="text-2xl md:text-3xl font-semibold">
+                  ENVIA TU MENSAJE
+                </h2>
+
+                {/* mail svg icon  */}
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="icon icon-tabler icon-tabler-mail-forward "
+                  width="33"
+                  height="33"
+                  viewBox="0 0 24 24"
+                  stroke-width="1.5"
+                  stroke="black"
+                  fill="none"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                  <path d="M12 18h-7a2 2 0 0 1 -2 -2v-10a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v7.5" />
+                  <path d="M3 6l9 6l9 -6" />
+                  <path d="M15 18h6" />
+                  <path d="M18 15l3 3l-3 3" />
+                </svg>
+              </div>
+
+              {/* bottom form with input fields  */}
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-8 py-6 px-4 md:py-12 md:px-8 text-sm">
+                {/* name input  */}
+                <div class="flex flex-col gap-1">
+                  <label class="font-semibold">
+                    Name <span class="text-red-500">&#42;</span>
+                  </label>
+                  <input
+                    class="border-[1px] p-2 rounded-md"
+                    placeholder="Nombres"
+                    required
+                    name="name"
+                    type="text"
+                  />
+                </div>
+                {/* name2 input  */}
+                <div class="flex flex-col gap-1">
+                  <label class="font-semibold">
+                    Name <span class="text-red-500">&#42;</span>
+                  </label>
+                  <input
+                    class="border-[1px] p-2 rounded-md"
+                    placeholder="Apellidos"
+                    required
+                    name="name2"
+                    type="text"
+                  />
+                </div>
+
+                {/* email input  */}
+                <div class="flex flex-col gap-1">
+                  <label class="font-semibold">
+                    Email <span class="text-red-500">&#42;</span>
+                  </label>
+                  <input
+                    class="border-[1px] p-2 rounded-md"
+                    placeholder="Correo electronico"
+                    required
+                    name="user_email"
+                    type="email"
+                  />
+                </div>
+
+                {/* phone number input  */}
+                <div class="flex flex-col gap-1">
+                  <label class="font-semibold">
+                    Phone <span class="text-red-500">&#42;</span>
+                  </label>
+                  <input
+                    class="border-[1px] p-2 rounded-md"
+                    placeholder="Numero de telefono"
+                    required
+                    name="phone"
+                    type="tel"
+                  />
+                </div>
+
+                
+
+                {/* message input  */}
+                <div class="flex flex-col gap-1 md:col-span-2">
+                  <label class="font-semibold">
+                    Message <span class="text-red-500">&#42;</span>
+                  </label>
+                  <textarea
+                    class="border-[1px] p-2 rounded-md"
+                    placeholder="Mensaje"
+                    required
+                    name="user_message"
+                    type="text"
+                  />
+                </div>
+              </div>
+              {/* submit button div  */}
+              <div class="flex items-center justify-center md:justify-end py-4 px-8">
+                {/* submit button  */}
+                <button class="mr-2 py-2 px-4 md:py-4 md:px-6 bg-indigo-600 flex items-center gap-2 hover:scale-95 transition-all">
+                  <span class="text-xl text-white">Submit</span>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="icon icon-tabler icon-tabler-brand-telegram"
+                    width="30"
+                    height="30"
+                    viewBox="0 0 24 24"
+                    stroke-width="1.5"
+                    stroke="#fff"
+                    fill="none"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                    <path d="M15 10l-4 4l6 6l4 -16l-18 7l4 2l2 6l3 -4" />
+                  </svg>
+                </button>
+                {success && (
+                  <span className="font-semibold text-green-600 ">
+                    ¡Tu mensaje ha sido enviado exitosamente!
+                  </span>
+                )}
+                {error && (
+                  <span className="font-semibold text-red-600">
+                    ¡Algo salió mal!
+                  </span>
+                )}
+              </div>
+            </form>
+            {/* contenedor de la imagen */}
+            <div class="p-6 mr-2 sm:rounded-lg">
+              <div class="flex items-center">
+                <Lottie animationData={Animation} />
+              </div>
+            </div>
           </div>
         </div>
-        {/* FORM CONTAINER */}
-        <form
-          onSubmit={sendEmail}
-          ref={form}
-          className="flex flex-col justify-center h-full gap-8 p-8 text-xl text-black sm:p-16 md:p-20 lg:p-24 lg:h-full lg:w-1/2 bg-red-50 rounded-xl"
-          //className="flex flex-col justify-center gap-8 p-24 text-xl text-black sm:h-full h-1/2 lg:h-full lg:w-1/2 bg-red-50 rounded-xl"
-        >
-          <span>Mensaje</span>
-          <textarea
-            rows={6}
-            className="bg-transparent border-b-2 outline-none resize-none border-b-black"
-            name="user_message"
-          placeholder="Escribe un mensaje aqui"/>
-          <span>Correo electronico</span>
-          <input
-            name="user_email"
-            type="text"
-            className="bg-transparent border-b-2 outline-none border-b-black"
-          />
-          
-          <button className="p-4 font-semibold text-gray-600 bg-purple-200 rounded">
-            Enviar
-          </button>
-          {success && (
-            <span className="font-semibold text-green-600">
-             ¡Tu mensaje ha sido enviado exitosamente!
-            </span>
-          )}
-          {error && (
-            <span className="font-semibold text-red-600">
-              ¡Algo salió mal!
-            </span>
-          )}
-        </form>
       </div>
-    </motion.div>
+    </div>
+  
   );
 };
 
-export default ContactPage;
+export default contacto;
