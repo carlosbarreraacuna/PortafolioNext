@@ -1,13 +1,13 @@
 "use client";
 
-import { motion, useInView, useScroll } from "framer-motion";
+import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
 import Lottie from 'lottie-react';
 import developerAnimation from '../../app/Biografia/Developer.json';
 
 const About = () => {
   const containerRef = useRef();
-  const { scrollYProgress } = useScroll({ container: containerRef });
+
 
   //Movimientos para el titulo y la lista de habilidades
   const skillRef = useRef();
