@@ -1,7 +1,7 @@
 "use client";
 
 import Lottie from "lottie-react";
-import Animation from "../../app/prueba/Animation.json";
+import Animation from "../../app/contacto/Animation.json";
 import { useRef, useState } from "react";
 import emailjs from "@emailjs/browser";
 
@@ -72,7 +72,7 @@ const contacto = () => {
                 {/* name input  */}
                 <div class="flex flex-col gap-1">
                   <label class="font-semibold">
-                    Name <span class="text-red-500">&#42;</span>
+                    Nombres <span class="text-red-500">&#42;</span>
                   </label>
                   <input
                     class="border-[1px] p-2 rounded-md"
@@ -85,7 +85,7 @@ const contacto = () => {
                 {/* name2 input  */}
                 <div class="flex flex-col gap-1">
                   <label class="font-semibold">
-                    Name <span class="text-red-500">&#42;</span>
+                    Apellidos <span class="text-red-500">&#42;</span>
                   </label>
                   <input
                     class="border-[1px] p-2 rounded-md"
@@ -99,7 +99,7 @@ const contacto = () => {
                 {/* email input  */}
                 <div class="flex flex-col gap-1">
                   <label class="font-semibold">
-                    Email <span class="text-red-500">&#42;</span>
+                    Correo electronico <span class="text-red-500">&#42;</span>
                   </label>
                   <input
                     class="border-[1px] p-2 rounded-md"
@@ -113,7 +113,7 @@ const contacto = () => {
                 {/* phone number input  */}
                 <div class="flex flex-col gap-1">
                   <label class="font-semibold">
-                    Phone <span class="text-red-500">&#42;</span>
+                    Telefono <span class="text-red-500">&#42;</span>
                   </label>
                   <input
                     class="border-[1px] p-2 rounded-md"
@@ -129,7 +129,7 @@ const contacto = () => {
                 {/* message input  */}
                 <div class="flex flex-col gap-1 md:col-span-2">
                   <label class="font-semibold">
-                    Message <span class="text-red-500">&#42;</span>
+                    Mensaje <span class="text-red-500">&#42;</span>
                   </label>
                   <textarea
                     class="border-[1px] p-2 rounded-md"

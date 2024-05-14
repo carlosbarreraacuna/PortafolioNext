@@ -1,7 +1,7 @@
 "use client";
 
 import Lottie from "lottie-react";
-import Animation from "../../app/prueba/Animation.json";
+
 import { useRef, useState } from "react";
 import emailjs from "@emailjs/browser";
 
@@ -176,7 +176,7 @@ const prueba = () => {
             {/* contenedor de la imagen */}
             <div class="p-6 mr-2 sm:rounded-lg">
               <div class="flex items-center">
-                <Lottie animationData={Animation} />
+                
               </div>
             </div>
           </div>
