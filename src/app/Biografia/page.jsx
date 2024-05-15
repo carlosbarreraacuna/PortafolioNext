@@ -47,8 +47,7 @@ const About = () => {
             </p>
             {/* BIOGRAFIA quote */}
             <span className="italic">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit.
-              Asperiores, at?
+              Desarrollador de software: FrontEnd - Backend
             </span>
 
             {/* BIOGRAPHY SIGN SVG*/}
@@ -273,6 +272,10 @@ const About = () => {
                 {/* JOB DATE */}
                 <div className="p-3 text-sm font-semibold text-red-400">
                   Feb 2022 - Jun 2022{" "}
+                </div>
+                {/* JOB COMPANY */}
+                <div className="p-1 text-sm font-semibold bg-white rounded w-fit">
+                  Tecnologico Comfenalco
                 </div>
               </div>
               {/* CENTER */}
