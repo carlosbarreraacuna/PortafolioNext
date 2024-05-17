@@ -34,7 +34,10 @@ const portafolio = () => {
                 class="w-full h-48 rounded-md object-cover"
               />
               <div class="px-1 py-4">
-                <div class="font-bold text-xl mb-2">Ecommerce - TesloShop</div>
+                <div class="font-bold text-xl mb-2">Ecommerce - TesloShop
+                <span class="ml-2 inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">En desarrollo</span>
+                </div>
+
                 <p class="text-gray-700 text-base">
                 E-commerce, actualmente en desarrollo con la tecnología Next.js, se perfila como una plataforma innovadora y ágil para la compra en línea. Con un enfoque en la experiencia del usuario, creando un espacio intuitivo y visualmente atractivo donde los clientes podrán descubrir y adquirir productos de manera sencilla y segura.
                 </p>

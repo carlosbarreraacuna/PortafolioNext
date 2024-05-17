@@ -141,9 +141,9 @@ const contacto = () => {
                 </div>
               </div>
               {/* submit button div  */}
-              <div class="flex items-center justify-center md:justify-end py-4 px-8">
+              <div class="flex items-center justify-center md:justify-end py-4 px-8 ">
                 {/* submit button  */}
-                <button class="mr-2 py-2 px-4 md:py-4 md:px-6 bg-indigo-600 flex items-center gap-2 hover:scale-95 transition-all">
+                <button class="rounded mr-2 py-2 px-4 md:py-4 md:px-6 bg-indigo-600 flex items-center gap-2 hover:scale-95 transition-all">
                   <span class="text-xl text-white">Enviar</span>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
