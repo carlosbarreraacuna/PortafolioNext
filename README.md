@@ -7,7 +7,7 @@
 
 ## Tecnologias utilizadas
 
-To learn more about Next.js, take a look at the following resources:
+Recursos utilizados para lograr la interactividad y el diseño de este portafolio:
 
 - Next JS
 - Tailwind CSS
@@ -18,8 +18,8 @@ To learn more about Next.js, take a look at the following resources:
 
 ## Despliegue en Vercel
 
-(https://portafolio-next-kappa.vercel.app/)
+https://portafolio-next-kappa.vercel.app/
 
 ## Despliegue en Azure for students
 
-(https://zealous-sea-00b5e780f.5.azurestaticapps.net/)
+https://zealous-sea-00b5e780f.5.azurestaticapps.net/
