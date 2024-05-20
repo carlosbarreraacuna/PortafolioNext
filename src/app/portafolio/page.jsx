@@ -18,7 +18,9 @@ const portafolio = () => {
               <div class="px-1 py-4">
                 <div class="font-bold text-xl mb-2">Sistema de atencion psicologica
                 <span class="ml-2 inline-flex items-center rounded-md bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10">PHP</span>
-                <span class="ml-2 inline-flex items-center rounded-md bg-pink-50 px-2 py-1 text-xs font-medium text-pink-700 ring-1 ring-inset ring-pink-700/10">CODEIGNEITER 3</span>
+                <span class="ml-2 inline-flex items-center rounded-md bg-pink-50 px-2 py-1 text-xs font-medium text-pink-700 ring-1 ring-inset ring-pink-700/10">Codeigneiter 3</span>
+                <span class="ml-2 inline-flex items-center rounded-md bg-purple-50 px-2 py-1 text-xs font-medium text-purple-700 ring-1 ring-inset ring-purple-700/10">PostgreSQL</span>
+                <span class="ml-2 inline-flex items-center rounded-md bg-yellow-50 px-2 py-1 text-xs font-medium text-yellow-800 ring-1 ring-inset ring-yellow-600/20">Javascript</span>
                 </div>
                 <p class="text-gray-700 text-base">
                 Desarrollado con PHP y el framework CodeIgniter 3 este sistema agiliza la gestión de consultorios y el seguimiento de pacientes. Facilita la programación de citas, el registro de historiales clínicos detallados y la generación de informes personalizados. Mejorando la experiencia de atención y el seguimiento del progreso terapéutico.
@@ -39,6 +41,10 @@ const portafolio = () => {
               <div class="px-1 py-4">
                 <div class="font-bold text-xl mb-2">Ecommerce - TesloShop
                 <span class="ml-2 inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">En desarrollo</span>
+                <span class="ml-2 inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10">Next JS</span>
+                <span class="ml-2 inline-flex items-center rounded-md bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10">Zustand</span>
+                <span class="ml-2 inline-flex items-center rounded-md bg-purple-50 px-2 py-1 text-xs font-medium text-purple-700 ring-1 ring-inset ring-purple-700/10">Prisma</span>
+
                 </div>
 
                 <p class="text-gray-700 text-base">
