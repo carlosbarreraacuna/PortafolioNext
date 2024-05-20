@@ -16,7 +16,10 @@ const portafolio = () => {
                 class="w-full h-48 rounded-md object-cover"
               />
               <div class="px-1 py-4">
-                <div class="font-bold text-xl mb-2">Sistema de atencion psicologica</div>
+                <div class="font-bold text-xl mb-2">Sistema de atencion psicologica
+                <span class="ml-2 inline-flex items-center rounded-md bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10">PHP</span>
+                <span class="ml-2 inline-flex items-center rounded-md bg-pink-50 px-2 py-1 text-xs font-medium text-pink-700 ring-1 ring-inset ring-pink-700/10">CODEIGNEITER 3</span>
+                </div>
                 <p class="text-gray-700 text-base">
                 Desarrollado con PHP y el framework CodeIgniter 3 este sistema agiliza la gestión de consultorios y el seguimiento de pacientes. Facilita la programación de citas, el registro de historiales clínicos detallados y la generación de informes personalizados. Mejorando la experiencia de atención y el seguimiento del progreso terapéutico.
                 </p>
