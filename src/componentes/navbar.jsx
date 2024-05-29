@@ -79,6 +79,14 @@ const Navbar = () => {
 
   return (
     <div className="flex items-center justify-between h-full px-4 text-xl sm:px-8 md:px-12 lg:px-20 xl:px-48">
+      <div className="xl:flex xl:justify-center xl:w-1/3">
+        <Link href="/">
+          <div className="flex items-center justify-center p-1 text-sm font-semibold bg-black rounded-md">
+            <span className="mr-1 text-white">Carlos</span>
+            <span className="flex items-center justify-center w-16 text-black bg-white rounded h-7">Barrera</span>
+          </div>
+        </Link>
+      </div>
       {/* HIDDEN PARA OCULTAR EL MENU DE NAVEGACION AL MOMENTO EN EL QUE ESTE SEA RESPONSIVE */}
       <div className="hidden gap-4 text-black md:flex ">
         {/* LINKS PARA ACCEDER AL MENU DE NAVEGACION EN EL MOMENTO EN QUE ESTA EN PANTALLA COMPLETA */}
@@ -88,14 +96,6 @@ const Navbar = () => {
         ))}
       </div>
       {/* LOGO */}
-      <div className="xl:flex xl:justify-center xl:w-1/3">
-        <Link href="/">
-          <div className="flex items-center justify-center p-1 text-sm font-semibold bg-black rounded-md">
-            <span className="mr-1 text-white">Carlos</span>
-            <span className="flex items-center justify-center w-16 text-black bg-white rounded h-7">Barrera</span>
-          </div>
-        </Link>
-      </div>
        {/* LINKS ICONOS */}
       <div className="justify-end hidden w-1/3 gap-4 just md:flex">        
         <Link href="https://github.com/carlosbarreraacuna">

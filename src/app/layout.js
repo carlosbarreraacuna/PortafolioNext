@@ -14,7 +14,7 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className={poppins.className}>
+      <body className={`${poppins.className} w-screen h-screen bg-gradient-to-b from-blue-100 to-red-100`}>
         
         <TransitionProvider>{children}</TransitionProvider>
       </body>
