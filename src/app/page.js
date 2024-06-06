@@ -18,24 +18,17 @@ const Home = () => {
       animate={{ y: "0%" }}
       transition={{ duration: 1 }}
     >
-      <div className="flex flex-col items-center justify-center h-full gap-4 px-4 text-xl lg:flex-row sm:px-8 md:px-12 lg:px-20 xl:px-48">
-        {/* IMAGE CONTAINER */}
-        <div className="flex flex-col items-center justify-center mx-auto lg:h-full lg:w-1/2 h-1/2">
-          <div className="bg-transparent border-2 rounded-full vbv"> 
-            
-          <Image className="rounded-full" src="/azul.png" 
-          alt=""
-          width={300}
-          height={300} 
-           />
-          </div>
-        </div>
+      <div className="flex flex-col items-center justify-center h-full gap-4 px-24 text-xl lg:flex-row sm:px-8 md:px-12 lg:px-20 xl:px-48">
         {/* TEXT CONTAINER */}
-        <div className="flex flex-col items-center justify-center gap-8 lg:h-full lg:w-1/2 h-1/2">
+        <div className="flex flex-col items-start justify-center gap-8 lg:h-full lg:w-1/2 h-1/2">
           {/* TITULO */}
-          <hi className="text-4xl font-bold text-black sm:pt-10 md:text-6xl">
-            DESARROLLADOR DE SOFTWARE
-          </hi>
+          <h1 className="text-4xl font-bold text-black sm:pt-10 md:text-6xl">
+            Hola, mi nombre es Carlos Barrera
+          </h1>
+          <h1 className="text-2xl md:text-xl">
+            FrontEnd Developer
+          </h1>
+          
           {/* DESCRIPCION */}
           <p className="text-black md:text-xl">
             Soy un ingeniero de sistemas enfocado en el desarrollo de software,
@@ -56,6 +49,17 @@ const Home = () => {
             >
               Contactame
             </a>
+          </div>
+        </div>
+        {/* IMAGE CONTAINER */}
+        <div className="flex flex-col items-center justify-center mx-auto lg:h-full lg:w-1/2 h-1/2">
+          <div className="bg-transparent border-2 rounded-full vbv"> 
+            
+          <Image className="rounded-full" src="/azul.png" 
+          alt=""
+          width={500}
+          height={500} 
+           />
           </div>
         </div>
       </div>
