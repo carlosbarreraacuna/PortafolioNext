@@ -33,9 +33,9 @@ const contacto = () => {
       );
   };
   return (
-    <div class=" flex justify-center h-full items-top sm:items-center sm:pt-0">
-      <div class="max-w-6xl mx-auto sm:px-6 lg:px-8">
-        <div class="h-full mt-8 overflow-hidden">
+    <div class=" flex justify-center h-full w-full items-top sm:items-center sm:pt-0">
+        <div class="h-full pt-8 overflow-hidden">
+      <div class="pt-5 max-w-6xl mx-auto sm:px-6 lg:px-8">
           <div class="h-full grid grid-cols-1 md:grid-cols-2">
             {/* contenedor de el formulario */}
             <form onSubmit={sendEmail} ref={form} className="text-black">
@@ -141,9 +141,9 @@ const contacto = () => {
                 </div>
               </div>
               {/* submit button div  */}
-              <div class="flex items-center justify-center md:justify-end py-4 px-8">
+              <div class="flex items-center justify-center md:justify-end py-4 px-8 ">
                 {/* submit button  */}
-                <button class="mr-2 py-2 px-4 md:py-4 md:px-6 bg-indigo-600 flex items-center gap-2 hover:scale-95 transition-all">
+                <button class="rounded mr-2 py-2 px-4 md:py-4 md:px-6 bg-indigo-600 flex items-center gap-2 hover:scale-95 transition-all">
                   <span class="text-xl text-white">Enviar</span>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
