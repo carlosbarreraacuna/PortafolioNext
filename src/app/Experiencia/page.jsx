@@ -20,10 +20,10 @@ const About = () => {
       {/* CONTAINER */}
       <div className="flex flex-col" ref={containerRef}>
         {/* BIOGRAFIA Y HABILIDADES */}
-        <div className="flex flex-col p-4 text-black sm:p-6 md:p-8 lg:p-10 xl:p-12">
-          <div className="flex flex-col lg:flex-row lg:gap-8 lg:justify-between">
+        {/* <div className="flex flex-col p-4 text-black sm:p-6 md:p-8 lg:p-10 xl:p-12">
+          <div className="flex flex-col lg:flex-row lg:gap-8 lg:justify-between"> */}
             {/* BIOGRAFIA CONTAINER */}
-            <div className="flex flex-col mb-6 lg:mb-0 lg:w-3/5">
+            {/* <div className="flex flex-col mb-6 lg:mb-0 lg:w-3/5">
               <h1 className="text-2xl font-bold mb-2">BIOGRAFIA</h1>
               <p className="text-sm lg:text-base mb-2">
                 Soy una persona completamente enfocada al área de sistemas de información y el área de desarrollo de
@@ -37,10 +37,10 @@ const About = () => {
               <div className="self-end">
                 <img src="/Carlos_Barrera_firma.png" alt="Firma" className="h-8" />
               </div>
-            </div>
+            </div> */}
 
             {/* SKILLS CONTAINER */}
-            <div className="flex flex-col lg:w-2/5" ref={skillRef}>
+            {/* <div className="flex flex-col lg:w-2/5" ref={skillRef}>
               <motion.h1
                 initial={{ x: "-300px" }}
                 animate={isSkillRefInView ? { x: 0 } : {}}
@@ -84,9 +84,9 @@ const About = () => {
                   <img src="/habilidades/postgresql.svg" alt="POSTGRESQL" className="w-8 h-8" />
                 </div>
               </motion.div>
-            </div>
-          </div>
-        </div>
+            </div> */}
+          {/* </div>
+        </div> */}
 
         {/* EXPERIENCIA - HOJA DE RUTA */}
         <div className="p-4 sm:p-6 md:p-8 lg:p-10 xl:p-12 flex flex-col flex-1">
