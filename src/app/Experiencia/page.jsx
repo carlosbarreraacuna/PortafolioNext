@@ -89,16 +89,16 @@ const About = () => {
         </div> */}
 
         {/* EXPERIENCIA - HOJA DE RUTA */}
-        <div className="p-4 sm:p-6 md:p-8 lg:p-10 xl:p-12 flex flex-col flex-1">
-          <motion.h1
-            initial={{ x: "-300px" }}
-            animate={isExperienceRefInView ? { x: "0" } : {}}
-            transition={{ delay: 0.2 }}
-            className="text-2xl font-bold mb-4"
-            ref={experienceRef}
-          >
-            EXPERIENCIA
-          </motion.h1>
+        <div className="p-6 flex flex-col flex-1">
+        <motion.div
+  className="container mx-auto p-4 text-center"
+  initial={{ opacity: 0, y: -20 }}
+  animate={{ opacity: 1, y: 0 }}
+  transition={{ duration: 0.5 }}
+>
+  <h2 className="font-bold text-6xl font-display">Experiencia</h2>
+  <p className="text-xl mt-2 text-slate-500">Sobre la experiencia laboral</p>
+</motion.div>
 
           {/* Contenedor sin altura fija ni scroll */}
           <div className="pr-2">

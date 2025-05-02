@@ -80,33 +80,34 @@ const Portfolio = () => {
     },
     {
       id: 4,
-      title: "Dashboard Analítico",
-      image: "/placeholder.svg?height=300&width=400",
+      title: "Portal ciudadano PQRSD",
+      image: "/PORTAL.png",
       description:
-        "Panel de control interactivo que visualiza datos empresariales en tiempo real. Desarrollado con Vue.js y D3.js, ofrece gráficos personalizables, filtros avanzados y reportes exportables. Ideal para la toma de decisiones basada en datos con una interfaz intuitiva y responsive.",
+        "Este portal diseñado para gestionar peticiones, quejas y reclamos, solicitudes, denuncias (PQRSD), optimizando la comunicación entre usuarios y la entidad responsable. Desarrollado con Next.js (React) en el frontend para una interfaz dinámica y responsive, utiliza una API RESTful en Laravel (PHP) para procesar solicitudes y una base de datos PostgreSQL para almacenamiento seguro y escalable. El despliegue se realiza en Vercel (frontend) Sus funcionalidades clave incluyen registro intuitivo de PQRSD, notificaciones y un panel administrativo para métricas y reportes.",
       tags: [
-        { name: "Vue.js", color: "green" },
-        { name: "D3.js", color: "orange" },
-        { name: "Node.js", color: "green" },
-        { name: "MongoDB", color: "green" },
+        { name: "Next.js", color: "gray" },
+        { name: "Laravel", color: "orange" },
+        { name: "PostgreSQL", color: "blue" },
+       
       ],
       links: [{ name: "Más información", url: "/contacto" }],
+      links: [{ name: "Demo", url: "/https://portal-five-sepia.vercel.app/#inicio" }],
     },
     {
       id: 5,
-      title: "Plataforma Educativa",
+      title: "Gestion Documental",
       image: "/placeholder.svg?height=300&width=400",
       description:
         "Sistema LMS (Learning Management System) que facilita la creación y gestión de cursos online. Incluye funcionalidades como videoconferencias, evaluaciones automatizadas, foros de discusión y seguimiento del progreso del estudiante. Desarrollado con Django y React.",
       tags: [
-        { name: "Django", color: "green" },
-        { name: "React", color: "blue" },
+        { name: "Next js", color: "gray" },
+        { name: "Laravel", color: "orange" },
         { name: "PostgreSQL", color: "purple" },
         { name: "AWS", color: "orange" },
       ],
       links: [
         { name: "Más información", url: "/contacto" },
-        { name: "Demo", url: "#" },
+        { name: "Demo", url: "https://gestion-docs-front.vercel.app/" },
       ],
     },
     {
