@@ -94,39 +94,43 @@ const Portfolio = () => {
       links: [{ name: "Demo", url: "/https://portal-five-sepia.vercel.app/#inicio" }],
     },
     {
-      id: 5,
-      title: "Gestion Documental",
-      image: "/placeholder.svg?height=300&width=400",
-      description:
-        "Sistema LMS (Learning Management System) que facilita la creación y gestión de cursos online. Incluye funcionalidades como videoconferencias, evaluaciones automatizadas, foros de discusión y seguimiento del progreso del estudiante. Desarrollado con Django y React.",
-      tags: [
-        { name: "Next js", color: "gray" },
-        { name: "Laravel", color: "orange" },
-        { name: "PostgreSQL", color: "purple" },
-        { name: "AWS", color: "orange" },
-      ],
-      links: [
-        { name: "Más información", url: "/contacto" },
-        { name: "Demo", url: "https://gestion-docs-front.vercel.app/" },
-      ],
-    },
+  id: 5,
+  title: "Sistema de Gestión Documental",
+  image: "/gd.png",
+  description:
+    "Sistema de Gestión Documental diseñado para la administración, organización y trazabilidad de documentos institucionales. Permite la radicación, clasificación por series y subseries documentales, control de versiones, gestión de expedientes, búsqueda avanzada y control de accesos por roles. Incluye auditoría de acciones, almacenamiento seguro y panel administrativo para la supervisión del ciclo de vida documental.",
+  tags: [
+    { name: "Next.js", color: "gray" },
+    { name: "Laravel API", color: "orange" },
+    { name: "PostgreSQL", color: "purple" },
+    { name: "AWS", color: "orange" },
+  ],
+  links: [
+    { name: "Más información", url: "/contacto" },
+    { name: "Demo", url: "https://gestion-docs-front.vercel.app/" },
+  ],
+},
+
     {
-      id: 6,
-      title: "API RESTful de Microservicios",
-      image: "/placeholder.svg?height=300&width=400",
-      description:
-        "Arquitectura de microservicios implementada con Spring Boot que proporciona endpoints RESTful para diversas funcionalidades empresariales. Incluye autenticación JWT, documentación con Swagger, pruebas automatizadas y despliegue en contenedores Docker.",
-      tags: [
-        { name: "Spring Boot", color: "green" },
-        { name: "Docker", color: "blue" },
-        { name: "Kubernetes", color: "blue" },
-        { name: "MySQL", color: "orange" },
-      ],
-      links: [
-        { name: "Más información", url: "/contacto" },
-        { name: "GitHub", url: "#" },
-      ],
-    },
+  id: 6,
+  title: "Software de Mesa de Ayuda (HelpDesk)",
+  image: "/helpdesk.png",
+  description:
+    "Sistema de mesa de ayuda desarrollado con arquitectura moderna para la gestión integral de tickets de soporte. Permite la creación, seguimiento y administración de solicitudes, con control de estados, prioridades y SLA. Incluye autenticación segura, roles y permisos, notificaciones en tiempo real, integración con WhatsApp y un panel administrativo para supervisión y métricas.",
+  tags: [
+    { name: "Laravel API", color: "red" },
+    { name: "Next.js", color: "blue" },
+    { name: "PostgreSQL", color: "orange" },
+    { name: "Tailwind CSS", color: "cyan" },
+    { name: "ShadCN/UI", color: "gray" },
+    { name: "WhatsApp Bot", color: "green" },
+  ],
+  links: [
+    { name: "Más información", url: "/contacto" },
+    { name: "Demo", url: "#" },
+  ],
+}
+
   ]
 
   const getTagColorClasses = (color) => {
