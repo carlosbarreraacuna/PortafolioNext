@@ -3,34 +3,51 @@
 import Lottie from "lottie-react";
 import Animation from "../../app/contacto/Animation.json";
 import { useRef, useState } from "react";
-import emailjs from "@emailjs/browser";
 
 const contacto = () => {
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState(false);
+  const [loading, setLoading] = useState(false);
   const form = useRef();
 
-  const sendEmail = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setError(false);
     setSuccess(false);
+    setLoading(true);
 
-    emailjs
-      .sendForm(
-        process.env.NEXT_PUBLIC_SERVICE_ID,
-        process.env.NEXT_PUBLIC_TEMPLATE_ID,
-        form.current,
-        process.env.NEXT_PUBLIC_PUBLIC_KEY
-      )
-      .then(
-        () => {
-          setSuccess(true);
-          form.current.reset();
+    const formData = {
+      name: form.current.name.value,
+      name2: form.current.name2.value,
+      email: form.current.user_email.value,
+      phone: form.current.phone.value,
+      message: form.current.user_message.value
+    };
+
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
         },
-        () => {
-          setError(true);
-        }
-      );
+        body: JSON.stringify(formData),
+      });
+
+      const result = await response.json();
+      
+      if (response.ok && result.message) {
+        setSuccess(true);
+        form.current.reset();
+      } else {
+        setError(true);
+        console.error('API Error:', result.error);
+      }
+    } catch (err) {
+      setError(true);
+      console.error('Form submission error:', err);
+    } finally {
+      setLoading(false);
+    }
   };
   return (
     <div class=" flex justify-center h-full w-full items-top sm:items-center sm:pt-0">
@@ -38,7 +55,7 @@ const contacto = () => {
       <div class="pt-5 max-w-6xl mx-auto sm:px-6 lg:px-8">
           <div class="h-full grid grid-cols-1 md:grid-cols-2">
             {/* contenedor de el formulario */}
-            <form onSubmit={sendEmail} ref={form} className="text-black">
+            <form onSubmit={handleSubmit} ref={form} className="text-black">
               {/* form top part containing mail icon and heading  */}
               <div class="flex flex-col md:flex-row justify-around items-start md:items-center pt-8 p-4">
                 {/* heading  */}
@@ -143,8 +160,14 @@ const contacto = () => {
               {/* submit button div  */}
               <div class="flex items-center justify-center md:justify-end py-4 px-8 ">
                 {/* submit button  */}
-                <button class="rounded mr-2 py-2 px-4 md:py-4 md:px-6 bg-indigo-600 flex items-center gap-2 hover:scale-95 transition-all">
-                  <span class="text-xl text-white">Enviar</span>
+                <button 
+                  type="submit"
+                  disabled={loading}
+                  className="rounded mr-2 py-2 px-4 md:py-4 md:px-6 bg-indigo-600 flex items-center gap-2 hover:scale-95 transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
+                >
+                  <span className="text-xl text-white">
+                    {loading ? 'Enviando...' : 'Enviar'}
+                  </span>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     class="icon icon-tabler icon-tabler-brand-telegram"
