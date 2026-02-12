@@ -78,7 +78,7 @@ const Navbar = () => {
 
 
   return (
-    <div className="flex items-center justify-between h-full px-4 text-xl sm:px-8 md:px-12 lg:px-20 xl:px-24">
+    <div className="flex items-center justify-between h-full px-4 text-xl sm:px-6 md:px-8 lg:px-12 xl:px-16">
       <div className="xl:flex xl:justify-start xl:w-1/3">
         <Link href="/">
           <div className="flex items-center justify-center p-1 text-sm font-semibold bg-black rounded-md">

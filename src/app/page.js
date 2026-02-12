@@ -14,47 +14,51 @@ const Home = () => {
         transition={{ duration: 1 }}
         className="h-full flex items-center justify-center"
       >
-        <div className="flex flex-col lg:flex-row items-center justify-between w-full h-full px-4 sm:px-8 md:px-12 lg:px-16 xl:px-24">
+        <div className="flex flex-col lg:flex-row items-center justify-center w-full h-full px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 gap-8 lg:gap-12 pt-32 sm:pt-40 lg:pt-48">
           {/* TEXT CONTAINER */}
-          <div className="flex flex-col items-center lg:items-start justify-center gap-3 lg:gap-4 w-full lg:w-1/2 h-full pt-4 lg:pt-0">
+          <div className="flex flex-col items-center lg:items-start justify-center gap-4 lg:gap-6 w-full lg:w-1/2 max-w-lg pt-8 sm:pt-12 md:pt-16 lg:pt-20">
             {/* TITULO */}
-            <h1 className="text-xl font-bold text-black md:text-2xl text-center lg:text-left w-full">
+            <h1 className="text-xl sm:text-2xl font-bold text-black text-center lg:text-left w-full">
               <AnimationText />
             </h1>
-            <h1 className="text-lg md:text-xl text-black text-center lg:text-left w-full">
-              Ingeniero de sistemas - Desarrollador FrontEnd
-            </h1>
+            <h2 className="text-lg sm:text-xl text-black text-center lg:text-left w-full font-medium">
+              Ingeniero de sistemas - Desarrollador Full Stack
+            </h2>
 
             {/* DESCRIPCION */}
-            <p className="text-black text-sm md:text-base lg:text-lg max-w-md text-center lg:text-left">
-            Ingeniero de Sistemas apasionado por el desarrollo frontend y backend, con experiencia en la creación de interfaces de usuario intuitivas y de alto rendimiento utilizando React JS y Next JS. Mi objetivo es aplicar mis habilidades en proyectos innovadores y desafiantes, contribuyendo al éxito de equipos de alto rendimiento. 
+            <p className="text-gray-700 text-sm sm:text-base text-center lg:text-left leading-relaxed">
+            Ingeniero de Sistemas con sólida experiencia en desarrollo de aplicaciones y soporte técnico. He trabajado en el mantenimiento, evolución y mejora de plataformas empresariales, combinando tareas de desarrollo, soporte a usuarios y administración de accesos.
+            <br className="hidden sm:block" />
+            Manejo tecnologías como Laravel, Next.js, PostgreSQL, Tailwind CSS y APIs REST, así como procesos de soporte técnico, documentación y control de versiones con Git.
+            <br className="hidden sm:block" />
+            Comprometido con la calidad del software, la estabilidad operativa y la mejora de la experiencia del usuario.
             </p>
 
             {/* BOTONES */}
-            <div className="flex w-full justify-center lg:justify-start gap-3 md:gap-4 mt-2">
-              <a href="/Experiencia" className="cursor-pointer inline-block text-white font-bold relative text-xs sm:text-sm md:text-[14px] px-3 sm:px-4 py-2 text-center bg-gradient-to-r from-blue-400 from-10% via-blue-500 via-30% to-blue-600 to-90% bg-[length:400%] rounded-[30px] z-10 hover:animate-gradient-xy hover:bg-[length:100%] before:content-[''] before:absolute before:-top-[5px] before:-bottom-[5px] before:-left-[5px] before:-right-[5px] before:bg-gradient-to-r before:from-blue-400 before:from-10% before:via-blue-500 before:via-30% before:to-blue-600 before:bg-[length:400%] before:-z-10 before:rounded-[35px] before:hover:blur-xl before:transition-all before:ease-in-out before:duration-[1s] before:hover:bg-[length:10%] active:bg-blue-700 focus:ring-blue-700/50">
+            <div className="flex flex-col sm:flex-row w-full justify-center lg:justify-start gap-3 sm:gap-4 mt-4">
+              <a href="/Experiencia" className="cursor-pointer inline-block text-white font-semibold text-sm sm:text-base px-6 py-3 text-center bg-gradient-to-r from-blue-500 to-blue-600 rounded-full hover:from-blue-600 hover:to-blue-700 transition-all duration-300 transform hover:scale-105 shadow-lg">
                 Experiencia
               </a>
-              <button className="cursor-pointer inline-block text-white font-bold relative text-xs sm:text-sm md:text-[14px] px-3 sm:px-4 py-2 text-center bg-gradient-to-r from-red-400 from-10% via-red-500 via-30% to-red-600 to-90% bg-[length:400%] rounded-[30px] z-10 hover:animate-gradient-xy hover:bg-[length:100%] before:content-[''] before:absolute before:-top-[5px] before:-bottom-[5px] before:-left-[5px] before:-right-[5px] before:bg-gradient-to-r before:from-red-400 before:from-10% before:via-red-500 before:via-30% before:to-red-600 before:bg-[length:400%] before:-z-10 before:rounded-[35px] before:hover:blur-xl before:transition-all before:ease-in-out before:duration-[1s] before:hover:bg-[length:10%] active:bg-red-700 focus:ring-red-700/50">
+              <button className="cursor-pointer inline-block text-white font-semibold text-sm sm:text-base px-6 py-3 text-center bg-gradient-to-r from-red-500 to-red-600 rounded-full hover:from-red-600 hover:to-red-700 transition-all duration-300 transform hover:scale-105 shadow-lg">
                 Contactame
               </button>
             </div>
 
             {/* Infinite Slider Section */}
-            <div className="w-full mt-3 md:mt-4">
+            <div className="w-full mt-6">
               <CompactSkillsSlider />
             </div>
           </div>
 
           {/* IMAGE CONTAINER */}
-          <div className="flex items-center justify-center w-full lg:w-1/2 h-full py-4 lg:py-0 mt-4 lg:mt-0">
-            <div className="bg-transparent border-2 rounded-full w-[200px] h-[200px] sm:w-[240px] sm:h-[240px] md:w-[280px] md:h-[280px] lg:w-[320px] lg:h-[320px] xl:w-[360px] xl:h-[360px] relative">
+          <div className="flex items-center justify-center w-full lg:w-1/2 h-full py-4 lg:py-0">
+            <div className="bg-transparent border-4 border-white/20 backdrop-blur-sm rounded-full w-[280px] h-[280px] sm:w-[340px] sm:h-[340px] md:w-[400px] md:h-[400px] lg:w-[460px] lg:h-[460px] xl:w-[520px] xl:h-[520px] relative shadow-2xl">
               <Image
                 src="/azul.png"
                 alt="Profile Image"
                 fill
                 className="rounded-full object-cover"
-                sizes="(max-width: 640px) 200px, (max-width: 768px) 240px, (max-width: 1024px) 280px, (max-width: 1280px) 320px, 360px"
+                sizes="(max-width: 640px) 280px, (max-width: 768px) 340px, (max-width: 1024px) 400px, (max-width: 1280px) 460px, 520px"
                 priority
               />
             </div>
