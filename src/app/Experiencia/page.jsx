@@ -3,202 +3,287 @@
 import { motion, useInView } from "framer-motion"
 import { useRef } from "react"
 
-const About = () => {
+const Experience = () => {
   const containerRef = useRef()
-  const skillRef = useRef()
   const experienceRef = useRef()
-  const isSkillRefInView = useInView(skillRef, { margin: "-100px" })
   const isExperienceRefInView = useInView(experienceRef, { margin: "-100px" })
+
+  const experienceData = [
+    {
+      id: 1,
+      position: "Desarrollador Full Stack / Soporte TI",
+      company: "FUNDATICS",
+      period: "2025 – 2026",
+      description: "Desarrollo y mantenimiento de sistemas de gestión documental, portales administrativos y mesa de ayuda (Help Desk), integrando APIs REST, control de accesos y soporte técnico continuo.",
+      technologies: ["Next.js", "Laravel", "PostgreSQL", "Tailwind CSS", "API REST"],
+      isCurrent: true
+    },
+    {
+      id: 2,
+      position: "Desarrollador Full Stack",
+      company: "Fundación Universitaria Tecnológico Comfenalco",
+      period: "2023 – 2024",
+      description: "Desarrollo de aplicaciones web institucionales, optimización de rendimiento en PostgreSQL, implementación de roles y permisos, y mejora de la experiencia de usuario con interfaces modernas.",
+      technologies: ["React", "Laravel", "PostgreSQL", "Tailwind CSS", "JWT"]
+    },
+    {
+      id: 3,
+      position: "Auxiliar de Sistemas",
+      company: "ETEC S.A. Soluciones de Ingeniería",
+      period: "2022 – 2023",
+      description: "Soporte técnico a usuarios, administración de accesos, mantenimiento de equipos y resolución de incidentes en sistemas operativos y aplicaciones corporativas.",
+      technologies: ["Windows Server", "Active Directory", "SQL Server", "Soporte Técnico"]
+    }
+  ]
+
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.2,
+        delayChildren: 0.3
+      }
+    }
+  }
+
+  const itemVariants = {
+    hidden: { 
+      opacity: 0, 
+      y: 30,
+      scale: 0.9
+    },
+    visible: { 
+      opacity: 1, 
+      y: 0,
+      scale: 1,
+      transition: {
+        duration: 0.6,
+        ease: "easeOut"
+      }
+    }
+  }
+
+  const timelineVariants = {
+    hidden: { 
+      scaleX: 0,
+      originX: 0
+    },
+    visible: {
+      scaleX: 1,
+      originX: 0,
+      transition: {
+        duration: 1,
+        ease: "easeInOut",
+        delay: 0.5
+      }
+    }
+  }
 
   return (
     <motion.div
-      className="min-h-screen"
+      className="min-h-[80vh]"
       initial={{ y: "-200vh" }}
       animate={{ y: "0%" }}
       transition={{ duration: 1 }}
     >
-      {/* CONTAINER */}
-      <div className="flex flex-col" ref={containerRef}>
-        {/* BIOGRAFIA Y HABILIDADES */}
-        {/* <div className="flex flex-col p-4 text-black sm:p-6 md:p-8 lg:p-10 xl:p-12">
-          <div className="flex flex-col lg:flex-row lg:gap-8 lg:justify-between"> */}
-            {/* BIOGRAFIA CONTAINER */}
-            {/* <div className="flex flex-col mb-6 lg:mb-0 lg:w-3/5">
-              <h1 className="text-2xl font-bold mb-2">BIOGRAFIA</h1>
-              <p className="text-sm lg:text-base mb-2">
-                Soy una persona completamente enfocada al área de sistemas de información y el área de desarrollo de
-                software dedicado a el aprendizaje de manera autodidacta adquiriendo conocimientos mediante recursos
-                tecnológicos, teniendo en cuenta una identidad asertiva, disciplinada, responsable y con sentido de
-                pertenencia. Estando siempre a la vanguardia de las tendencias en el campo tecnológico y laboral
-                otorgando innovación y creatividad a lo proyectado a empresas, ayudando a la resolución de los problemas
-                al interior de ella.
-              </p>
-              <span className="italic text-sm mb-1">Desarrollador de software: FrontEnd - Backend</span>
-              <div className="self-end">
-                <img src="/Carlos_Barrera_firma.png" alt="Firma" className="h-8" />
-              </div>
-            </div> */}
-
-            {/* SKILLS CONTAINER */}
-            {/* <div className="flex flex-col lg:w-2/5" ref={skillRef}>
-              <motion.h1
-                initial={{ x: "-300px" }}
-                animate={isSkillRefInView ? { x: 0 } : {}}
-                className="text-xl font-bold mb-2"
-              >
-                HABILIDADES
-              </motion.h1>
-              <motion.div
-                initial={{ x: "-300px" }}
-                animate={isSkillRefInView ? { x: 0 } : {}}
-                className="grid grid-cols-5 gap-2"
-              >
-                <div className="transition duration-75 ease-in-out hover:scale-110">
-                  <img src="/habilidades/html-5.svg" alt="HTML" className="w-8 h-8" />
-                </div>
-                <div className="transition duration-75 ease-in-out hover:scale-110">
-                  <img src="/habilidades/css-3.svg" alt="CSS" className="w-8 h-8" />
-                </div>
-                <div className="transition duration-75 ease-in-out hover:scale-110">
-                  <img src="/habilidades/javascript.svg" alt="JAVASCRIPT" className="w-8 h-8" />
-                </div>
-                <div className="transition duration-75 ease-in-out hover:scale-110">
-                  <img src="/habilidades/typescript.svg" alt="TYPESCRIPT" className="w-8 h-8" />
-                </div>
-                <div className="transition duration-75 ease-in-out hover:scale-110">
-                  <img src="/habilidades/react.svg" alt="REACT JS" className="w-8 h-8" />
-                </div>
-                <div className="transition duration-75 ease-in-out hover:scale-110">
-                  <img src="/habilidades/next-js.svg" alt="NEXT JS" className="w-8 h-8" />
-                </div>
-                <div className="transition duration-75 ease-in-out hover:scale-110">
-                  <img src="/habilidades/php.svg" alt="PHP" className="w-8 h-8" />
-                </div>
-                <div className="transition duration-75 ease-in-out hover:scale-110">
-                  <img src="/habilidades/codeigneiter3.svg" alt="CODEIGNEITER" className="w-8 h-8" />
-                </div>
-                <div className="transition duration-75 ease-in-out hover:scale-110">
-                  <img src="/habilidades/laravel.svg" alt="LARAVEL" className="w-8 h-8" />
-                </div>
-                <div className="transition duration-75 ease-in-out hover:scale-110">
-                  <img src="/habilidades/postgresql.svg" alt="POSTGRESQL" className="w-8 h-8" />
-                </div>
-              </motion.div>
-            </div> */}
-          {/* </div>
-        </div> */}
-
-        {/* EXPERIENCIA - HOJA DE RUTA */}
-        <div className="p-6 flex flex-col flex-1">
+      {/* Header */}
+      <div className="container mx-auto px-4 py-8">
         <motion.div
-  className="container mx-auto p-4 text-center"
-  initial={{ opacity: 0, y: -20 }}
-  animate={{ opacity: 1, y: 0 }}
-  transition={{ duration: 0.5 }}
->
-  <h2 className="font-bold text-6xl font-display">Experiencia</h2>
-  <p className="text-xl mt-2 text-slate-500">Sobre la experiencia laboral</p>
-</motion.div>
+          className="text-center mb-6"
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+        >
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 mb-3">
+            Experiencia Profesional
+          </h1>
+          <p className="text-base sm:text-lg text-gray-600 max-w-2xl mx-auto">
+            Mi trayectoria como desarrollador Full Stack
+          </p>
+        </motion.div>
 
-          {/* Contenedor sin altura fija ni scroll */}
-          <div className="pr-2">
-            {/* EXPERIENCE ROADMAP */}
-            <div className="flex flex-col">
-              {/* EXPERIENCE ITEM 1 */}
-              <div className="relative mb-8 lg:mb-12">
-                <div className="flex flex-col lg:flex-row lg:items-start">
-                  {/* Fecha y empresa - a la izquierda en desktop */}
-                  <div className="lg:w-1/4 mb-2 lg:mb-0 lg:pr-6 lg:text-right">
-                    <div className="text-sm font-semibold text-red-400">2023 - 2025</div>
-                    <div className="text-sm font-semibold">Tecnologico Comfenalco</div>
+        {/* Timeline Container */}
+        <div className="relative pb-8" ref={experienceRef}>
+          {/* Desktop Timeline */}
+          <div className="hidden lg:block">
+            {/* Línea horizontal principal */}
+            <motion.div
+              className="absolute top-1/2 left-0 right-0 h-1 bg-blue-400 transform -translate-y-1/2"
+              variants={timelineVariants}
+              initial="hidden"
+              animate={isExperienceRefInView ? "visible" : "hidden"}
+            />
+
+            {/* Cards del timeline */}
+            <motion.div
+              className="relative flex justify-between items-center"
+              variants={containerVariants}
+              initial="hidden"
+              animate={isExperienceRefInView ? "visible" : "hidden"}
+            >
+              {experienceData.map((exp, index) => (
+                <motion.div
+                  key={exp.id}
+                  className="flex flex-col items-center w-1/3"
+                  variants={itemVariants}
+                  whileHover={{ 
+                    y: -5,
+                    transition: { duration: 0.3 }
+                  }}
+                >
+                  {/* Punto del timeline */}
+                  <div className="relative mb-4">
+                    <div className={`w-4 h-4 ${exp.isCurrent ? 'bg-blue-500 ring-4 ring-blue-100' : 'bg-blue-400'} rounded-full ring-4 ring-white shadow-lg z-10`} />
+                    {exp.isCurrent && (
+                      <div className="absolute -top-8 left-1/2 transform -translate-x-1/2">
+                        <span className="px-3 py-1 bg-blue-500 text-white text-xs font-semibold rounded-full shadow-md whitespace-nowrap">
+                          Más reciente
+                        </span>
+                      </div>
+                    )}
                   </div>
 
-                  {/* Línea central con punto */}
-                  <div className="hidden lg:flex lg:flex-col lg:items-center lg:w-16 relative">
-                    <div className="w-4 h-4 bg-white rounded-full ring-4 ring-red-400 z-10"></div>
-                    <div className="w-0.5 bg-gray-600 absolute top-4 bottom-0 z-0 h-[calc(100%+3rem)]"></div>
-                  </div>
-
-                  {/* Contenido - a la derecha en desktop */}
-                  <div className="lg:w-3/4 lg:pl-6 bg-white/5 p-4 rounded-lg border-l-4 border-red-400 lg:border-l-0 lg:border-none lg:shadow-lg">
-                    <div className="font-semibold text-lg">Desarrollador Full-Stack</div>
-                    <div className="text-xs mt-2">
-                      • Diseñé una interfaz moderna y accesible con Tailwind CSS, optimizando la usabilidad y mejorando
-                      la experiencia del usuario final.
-                      <br />• Implementé validaciones tanto en el backend como en el frontend para garantizar la
-                      integridad de la información y prevenir errores en el ingreso de datos.
-                      <br />• Optimicé el rendimiento del Sistema de Atención Psicológica y el Software para Prácticas
-                      Universitarias mediante la implementación de consultas eficientes en PostgreSQL, asegurando una
-                      respuesta rápida y una mejor gestión de datos.
-                      <br />• Fortalecí la seguridad y administración del acceso en ambos sistemas al configurar roles y
-                      permisos con Spatie, garantizando un control adecuado de usuarios según sus funciones.
+                  {/* Card de experiencia */}
+                  <div className={`bg-white rounded-xl shadow-lg p-5 ${exp.isCurrent ? 'w-80 border-blue-200 border-2' : 'w-72 border-gray-100'} hover:shadow-xl transition-all duration-300`}>
+                    {/* Header */}
+                    <div className="mb-3">
+                      <h3 className={`font-bold text-gray-900 mb-1 ${exp.isCurrent ? 'text-lg' : 'text-base'}`}>
+                          {exp.position}
+                        </h3>
+                      <div className="flex items-center gap-2 text-blue-600 font-semibold mb-1">
+                        <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                        </svg>
+                        {exp.company}
+                      </div>
+                      <div className="flex items-center gap-2 text-xs text-gray-500">
+                        <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                        </svg>
+                        {exp.period}
+                      </div>
                     </div>
-                  </div>
-                </div>
-              </div>
 
-              {/* EXPERIENCE ITEM 2 */}
-              <div className="relative mb-8 lg:mb-12">
-                <div className="flex flex-col lg:flex-row lg:items-start">
-                  {/* Fecha y empresa - a la izquierda en desktop */}
-                  <div className="lg:w-1/4 mb-2 lg:mb-0 lg:pr-6 lg:text-right">
-                    <div className="text-sm font-semibold text-red-400">Jun 2022 - Dic 2022</div>
-                    <div className="text-sm font-semibold">ETEC INTERNATIONAL</div>
-                  </div>
+                    {/* Descripción */}
+                    <p className="text-gray-700 text-xs mb-3 leading-relaxed">
+                      {exp.description}
+                    </p>
 
-                  {/* Línea central con punto */}
-                  <div className="hidden lg:flex lg:flex-col lg:items-center lg:w-16 relative">
-                    <div className="w-4 h-4 bg-white rounded-full ring-4 ring-red-400 z-10"></div>
-                    <div className="w-0.5 bg-gray-600 absolute top-0 bottom-0 z-0 h-[calc(100%+3rem)]"></div>
+                    {/* Tecnologías */}
+                    {exp.technologies && (
+                      <div className="flex flex-wrap gap-1">
+                        {exp.technologies.map((tech, idx) => (
+                          <span
+                            key={idx}
+                            className="px-2 py-0.5 bg-gray-100 text-gray-700 text-xs font-medium rounded-full hover:bg-gray-200 transition-colors"
+                          >
+                            {tech}
+                          </span>
+                        ))}
+                      </div>
+                    )}
                   </div>
+                </motion.div>
+              ))}
+            </motion.div>
+          </div>
 
-                  {/* Contenido - a la derecha en desktop */}
-                  <div className="lg:w-3/4 lg:pl-6 bg-white/5 p-4 rounded-lg border-l-4 border-red-400 lg:border-l-0 lg:border-none lg:shadow-lg">
-                    <div className="font-semibold text-lg">Auxiliar de sistemas</div>
-                    <div className="text-xs mt-2">
-                      • Mantenimiento de equipos de cómputo
-                      <br />• Protocolo de usuarios de red y manejo de contraseñas en el dominio ETEC
-                      <br />• Permisos de usuarios en los recursos compartidos en el sistema de la compañía
-                      <br />• Configuración de la cuenta de correo en el dominio ETEC y políticas de uso
-                      <br />• Actualizar y formatear equipos de cómputo
+          {/* Mobile/Tablet - Scroll Horizontal */}
+          <div className="lg:hidden">
+            <motion.div
+              className="flex gap-6 overflow-x-auto pb-4 snap-x snap-mandatory scrollbar-hide"
+              variants={containerVariants}
+              initial="hidden"
+              animate={isExperienceRefInView ? "visible" : "hidden"}
+              style={{
+                scrollbarWidth: 'none',
+                msOverflowStyle: 'none'
+              }}
+            >
+              {experienceData.map((exp, index) => (
+                <motion.div
+                  key={exp.id}
+                  className="flex-none w-80 snap-center"
+                  variants={itemVariants}
+                  whileHover={{ 
+                    y: -5,
+                    transition: { duration: 0.3 }
+                  }}
+                >
+                  {/* Card de experiencia mobile */}
+                  <div className={`bg-white rounded-xl shadow-lg p-4 hover:shadow-xl transition-all duration-300 ${exp.isCurrent ? 'border-blue-200 border-2' : 'border-gray-100'} h-full`}>
+                    {/* Timeline indicator */}
+                    <div className="flex items-center gap-3 mb-3">
+                      <div className="relative">
+                        <div className={`w-3 h-3 ${exp.isCurrent ? 'bg-blue-500 ring-2 ring-blue-100' : 'bg-blue-400'} rounded-full ring-2 ring-white shadow-md`} />
+                        {exp.isCurrent && (
+                          <div className="absolute -top-6 left-1/2 transform -translate-x-1/2">
+                            <span className="px-3 py-1 bg-blue-500 text-white text-xs font-semibold rounded-full shadow-md whitespace-nowrap">
+                              Más reciente
+                            </span>
+                          </div>
+                        )}
+                      </div>
+                      <div className={`h-1 flex-1 ${exp.isCurrent ? 'bg-blue-500' : 'bg-blue-400'}`} />
                     </div>
-                  </div>
-                </div>
-              </div>
 
-              {/* EXPERIENCE ITEM 3 */}
-              <div className="relative">
-                <div className="flex flex-col lg:flex-row lg:items-start">
-                  {/* Fecha y empresa - a la izquierda en desktop */}
-                  <div className="lg:w-1/4 mb-2 lg:mb-0 lg:pr-6 lg:text-right">
-                    <div className="text-sm font-semibold text-red-400">Feb 2022 - Jun 2022</div>
-                    <div className="text-sm font-semibold">Tecnologico Comfenalco</div>
-                  </div>
-
-                  {/* Línea central con punto */}
-                  <div className="hidden lg:flex lg:flex-col lg:items-center lg:w-16 relative">
-                    <div className="w-4 h-4 bg-white rounded-full ring-4 ring-red-400 z-10"></div>
-                    <div className="w-0.5 bg-gray-600 absolute top-0 z-0 h-24"></div>
-                  </div>
-
-                  {/* Contenido - a la derecha en desktop */}
-                  <div className="lg:w-3/4 lg:pl-6 bg-white/5 p-4 rounded-lg border-l-4 border-red-400 lg:border-l-0 lg:border-none lg:shadow-lg">
-                    <div className="font-semibold text-lg">Auxiliar de recursos educativos</div>
-                    <div className="text-xs mt-2">
-                      • Brindar soporte a salas de sistemas
-                      <br />• Realizar el respectivo soporte y reporte de computadores que requieren de mantenimiento
-                      <br />• Requerimientos de software, reporte de computadores dañados
-                      <br />• Reportes mensuales del estado de equipos en salas de sistemas
+                    {/* Header */}
+                    <div className="mb-3">
+                      <h3 className={`font-bold text-gray-900 mb-1 ${exp.isCurrent ? 'text-lg' : 'text-base'}`}>
+                          {exp.position}
+                        </h3>
+                      <div className="flex items-center gap-2 text-blue-600 font-semibold mb-1">
+                        <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                        </svg>
+                        {exp.company}
+                      </div>
+                      <div className="flex items-center gap-2 text-xs text-gray-500">
+                        <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                        </svg>
+                        {exp.period}
+                      </div>
                     </div>
+
+                    {/* Descripción */}
+                    <p className="text-gray-700 text-xs mb-3 leading-relaxed">
+                      {exp.description}
+                    </p>
+
+                    {/* Tecnologías */}
+                    {exp.technologies && (
+                      <div className="flex flex-wrap gap-1">
+                        {exp.technologies.map((tech, idx) => (
+                          <span
+                            key={idx}
+                            className="px-2 py-0.5 bg-gray-100 text-gray-700 text-xs font-medium rounded-full hover:bg-gray-200 transition-colors"
+                          >
+                            {tech}
+                          </span>
+                        ))}
+                      </div>
+                    )}
                   </div>
-                </div>
-              </div>
-            </div>
+                </motion.div>
+              ))}
+            </motion.div>
           </div>
         </div>
       </div>
+
+      <style jsx>{`
+        .scrollbar-hide::-webkit-scrollbar {
+          display: none;
+        }
+        .scrollbar-hide {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
+        }
+      `}</style>
     </motion.div>
   )
 }
 
-export default About
+export default Experience
