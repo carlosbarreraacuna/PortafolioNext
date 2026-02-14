@@ -149,7 +149,7 @@ const Portfolio = () => {
   return (
     <div>
       <div className="flex items-center justify-center lg:h-full text-black">
-        <div className="container mx-auto p-4">
+        <div className="container mx-auto p-4 pt-40">
           <motion.h2
             className="font-bold text-center text-6xl font-display"
             initial={{ opacity: 0, y: -20 }}

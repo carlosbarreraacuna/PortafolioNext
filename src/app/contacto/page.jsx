@@ -51,7 +51,7 @@ const contacto = () => {
   };
   return (
     <div class=" flex justify-center h-full w-full items-top sm:items-center sm:pt-0">
-        <div class="h-full pt-8 overflow-hidden">
+        <div class="h-full pt-40 overflow-hidden">
       <div class="pt-5 max-w-6xl mx-auto sm:px-6 lg:px-8">
           <div class="h-full grid grid-cols-1 md:grid-cols-2">
             {/* contenedor de el formulario */}

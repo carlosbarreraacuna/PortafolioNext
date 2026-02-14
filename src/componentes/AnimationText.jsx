@@ -6,9 +6,6 @@ const AnimationText = () => {
   return (
     <TypeAnimation
       sequence={[
-        // Same substring at the start will only be typed out once, initially
-        "Hola, mi nombre es",
-        1000, // wait 1s before replacing "Mice" with "Hamsters"
         "Carlos Barrera",
         1000,
       ]}

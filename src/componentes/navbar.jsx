@@ -88,7 +88,7 @@ const Navbar = () => {
         </Link>
       </div>
       {/* HIDDEN PARA OCULTAR EL MENU DE NAVEGACION AL MOMENTO EN EL QUE ESTE SEA RESPONSIVE */}
-      <div className="hidden gap-4 text-black md:flex ">
+      <div className="hidden gap-4 text-white md:flex ">
         {/* LINKS PARA ACCEDER AL MENU DE NAVEGACION EN EL MOMENTO EN QUE ESTA EN PANTALLA COMPLETA */}
         {links.map(link => (
           <NavLink link={link} key={link.title}/>
@@ -113,9 +113,9 @@ const Navbar = () => {
         {/* BOTON MENU RESPONSIVE */}
         <button className="relative z-50 flex flex-col justify-between w-10 h-8"
           onClick={(() => setOpen(prev => !prev))}>   {/* CONTROLA EL COMPORTAMIENTO DEL BOTON AL SER ACCIONADO */}
-          <motion.div variants={topVariatns}  animate={open ? "opened" : "closed"} className="w-10 h-1 origin-left bg-black rounded" ></motion.div>
-          <motion.div variants={centerVariatns} animate={open ? "opened" : "closed"} className="w-10 h-1 bg-black rounded" ></motion.div>
-          <motion.div variants={bottomVariatns} animate={open ? "opened" : "closed"} className="w-10 h-1 origin-left bg-black rounded" ></motion.div>
+          <motion.div variants={topVariatns}  animate={open ? "opened" : "closed"} className="w-10 h-1 origin-left bg-white rounded" ></motion.div>
+          <motion.div variants={centerVariatns} animate={open ? "opened" : "closed"} className="w-10 h-1 bg-white rounded" ></motion.div>
+          <motion.div variants={bottomVariatns} animate={open ? "opened" : "closed"} className="w-10 h-1 origin-left bg-white rounded" ></motion.div>
         </button>
         {/* LISTA DEL MENU */}
         {open && (

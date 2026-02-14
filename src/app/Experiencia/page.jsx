@@ -88,7 +88,7 @@ const Experience = () => {
       transition={{ duration: 1 }}
     >
       {/* Header */}
-      <div className="container mx-auto px-4 py-8">
+      <div className="container mx-auto px-4 py-8 pt-40">
         <motion.div
           className="text-center mb-6"
           initial={{ opacity: 0, y: -20 }}
