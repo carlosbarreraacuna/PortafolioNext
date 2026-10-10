@@ -1,87 +1,205 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
-/* ── Base reset ─────────────────────────────────────────────────────────── */
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; }
-body { -webkit-font-smoothing: antialiased; }
-[data-theme="dark"]  body { cursor: none; background: #07070C; }
-[data-theme="light"] body { background: #F5F1EA; }
+/* El tema vive en [data-theme] sobre <html>. La variante dark de Tailwind sigue ese atributo. */
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
 
-/* ── Scrollbar ───────────────────────────────────────────────────────────── */
-::-webkit-scrollbar { width: 4px; }
-::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: rgba(94,234,212,.3); border-radius: 2px; }
-
-/* ── Custom cursor ───────────────────────────────────────────────────────── */
-.cb-cursor-dot, .cb-cursor-ring {
-  position: fixed; top: 0; left: 0;
-  pointer-events: none; z-index: 9999;
-  will-change: transform; border-radius: 50%;
-}
-.cb-cursor-dot  { width: 6px; height: 6px; }
-.cb-cursor-ring {
-  width: 36px; height: 36px; border: 1.5px solid;
-  transition: width .25s, height .25s, opacity .25s;
-  mix-blend-mode: screen;
-}
-.cb-cursor-ring.hover { width: 50px; height: 50px; opacity: .8; }
-
-/* ── Photo mask ──────────────────────────────────────────────────────────── */
-.photo-mask {
-  -webkit-mask-image: radial-gradient(ellipse 78% 68% at 50% 42%, #000 58%, rgba(0,0,0,.85) 70%, transparent 88%);
-  mask-image:         radial-gradient(ellipse 78% 68% at 50% 42%, #000 58%, rgba(0,0,0,.85) 70%, transparent 88%);
+/* ── Tokens: paleta "Oficina soleada", sacada de la ilustracion (crema, madera, azul tinta, naranja) ──
+   Un solo acento (naranja). Contraste verificado:
+   claro:  ink/canvas 12:1, muted/canvas 6.5:1, accent-text/canvas 5:1, on-accent/accent 4.7:1
+   oscuro: ink/canvas 14:1, muted/canvas 9:1, accent-text/canvas 7.7:1, on-accent/accent 8:1 */
+:root {
+  --canvas: #FFF4E2;
+  --surface: #FFFBF2;
+  --line: rgb(30 42 71 / 0.16);
+  --outline: #1E2A47;
+  --ink: #1E2A47;
+  --muted: #4C5878;
+  --accent: #F26B3A;
+  --accent-text: #B8431A;
+  --on-accent: #1E2A47;
+  --accent-soft: rgb(242 107 58 / 0.16);
+  --shadow-solid: #1E2A47;
+  --dots: rgb(30 42 71 / 0.13);
 }
 
-/* ── Noise texture ───────────────────────────────────────────────────────── */
-.noise-layer {
-  position: absolute; inset: 0; pointer-events: none; z-index: 0;
-  opacity: .04;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  background-repeat: repeat; background-size: 200px 200px;
+[data-theme="dark"] {
+  --canvas: #141A2B;
+  --surface: #1D2540;
+  --line: rgb(255 241 220 / 0.16);
+  --outline: #FFF1DC;
+  --ink: #FFF1DC;
+  --muted: #B7BFD6;
+  --accent: #FF8A5B;
+  --accent-text: #FF8A5B;
+  --on-accent: #141A2B;
+  --accent-soft: rgb(255 138 91 / 0.18);
+  --shadow-solid: #080B16;
+  --dots: rgb(255 241 220 / 0.1);
 }
 
-/* ── Tagline strikethrough (light mode DESARROLLADOR) ───────────────────── */
-.tag-strike { position: relative; display: block; }
-.tag-strike::before {
-  content: ''; position: absolute;
-  left: 0; right: 0; top: 52%;
-  height: 2.5px; background: currentColor; opacity: .55;
+@theme inline {
+  --color-canvas: var(--canvas);
+  --color-surface: var(--surface);
+  --color-line: var(--line);
+  --color-outline: var(--outline);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-accent: var(--accent);
+  --color-accent-text: var(--accent-text);
+  --color-on-accent: var(--on-accent);
+  --color-accent-soft: var(--accent-soft);
+
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
+
+  /* Forma: controles 16px, paneles 28px. Sin otros radios en la pagina. */
+  --radius-control: 1rem;
+  --radius-panel: 1.75rem;
+
+  /* Sombras planas desplazadas, estilo sticker. */
+  --shadow-toon: 4px 4px 0 var(--shadow-solid);
+  --shadow-toon-lg: 7px 7px 0 var(--shadow-solid);
+}
+
+/* Escala de capas: nav, drawer, grano. No usar otros z-index. */
+@utility z-nav { z-index: 40; }
+@utility z-drawer { z-index: 50; }
+@utility z-grain { z-index: 60; }
+
+@layer base {
+  html {
+    background: var(--canvas);
+    color-scheme: light;
+  }
+  html[data-theme="dark"] { color-scheme: dark; }
+  @media (prefers-reduced-motion: no-preference) {
+    html { scroll-behavior: smooth; }
+  }
+
+  body {
+    background: var(--canvas);
+    color: var(--ink);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  h1, h2, h3, h4 {
+    font-family: var(--font-display);
+    text-wrap: balance;
+  }
+  p { text-wrap: pretty; }
+
+  ::selection { background: var(--accent); color: var(--on-accent); }
+
+  :focus-visible {
+    outline: 3px solid var(--accent-text);
+    outline-offset: 3px;
+    border-radius: var(--radius-control);
+  }
+}
+
+/* ── Componentes cartoon ─────────────────────────────────────────────────── */
+@layer components {
+  /* Panel con contorno de tinta y sombra plana */
+  .toon-panel {
+    border: 2px solid var(--outline);
+    border-radius: var(--radius-panel);
+    box-shadow: var(--shadow-toon);
+  }
+  /* Control (boton, chip, input) con contorno de tinta */
+  .toon-control {
+    border: 2px solid var(--outline);
+    border-radius: var(--radius-control);
+  }
+  /* Boton con efecto de pulsado: sube al pasar el cursor y se hunde al presionar */
+  .toon-btn {
+    border: 2px solid var(--outline);
+    border-radius: var(--radius-control);
+    box-shadow: 3px 3px 0 var(--shadow-solid);
+    transition: transform 0.15s ease, box-shadow 0.15s ease, background-color 0.2s ease;
+  }
+  .toon-btn:hover { transform: translate(-1px, -1px); box-shadow: 5px 5px 0 var(--shadow-solid); }
+  .toon-btn:active { transform: translate(3px, 3px); box-shadow: 0 0 0 var(--shadow-solid); }
+  .toon-btn:disabled { transform: none; box-shadow: 3px 3px 0 var(--shadow-solid); }
+
+  /* Punteado tipo semitono para fondos */
+  .toon-dots {
+    background-image: radial-gradient(circle, var(--dots) 1.6px, transparent 1.8px);
+    background-size: 22px 22px;
+    mask-image: linear-gradient(to bottom, #000 55%, transparent);
+    -webkit-mask-image: linear-gradient(to bottom, #000 55%, transparent);
+  }
+
+  /* Superficies del bento */
+  .toon-tint { background-color: var(--accent-soft); }
+  .toon-pattern {
+    background-image: radial-gradient(circle, var(--dots) 1.6px, transparent 1.8px);
+    background-size: 18px 18px;
+    background-color: var(--surface);
+  }
+}
+
+/* Grano fijo, sin eventos, nunca sobre contenedores con scroll. */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 60;
   pointer-events: none;
+  opacity: 0.025;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 180px 180px;
+}
+[data-theme="dark"] body::after { opacity: 0.04; }
+
+/* Barra de scroll con contorno de tinta */
+::-webkit-scrollbar { width: 12px; }
+::-webkit-scrollbar-track { background: var(--canvas); border-left: 2px solid var(--outline); }
+::-webkit-scrollbar-thumb { background: var(--accent); border: 2px solid var(--outline); border-radius: 8px; }
+
+/* Enlace para saltar al contenido */
+.skip-link {
+  position: fixed;
+  top: 12px;
+  left: 12px;
+  z-index: 70;
+  padding: 10px 16px;
+  border: 2px solid var(--outline);
+  border-radius: var(--radius-control);
+  background: var(--accent);
+  color: var(--on-accent);
+  font-weight: 700;
+  transform: translateY(-200%);
+}
+.skip-link:focus { transform: translateY(0); }
+
+/* La mascara de SplitText recorta descendentes (p, g, y). Se reserva espacio y se compensa el margen. */
+.hero-line-mask { padding-bottom: 0.16em; margin-bottom: -0.16em; }
+
+/* La cortina de la foto solo existe si hay movimiento permitido; con movimiento reducido el retrato se ve de entrada. */
+.hero-photo-curtain { transform: scaleY(0); }
+@media (prefers-reduced-motion: no-preference) {
+  .hero-photo-curtain { transform: scaleY(1); }
 }
 
-/* ── Noise vignette ──────────────────────────────────────────────────────── */
-.vignette {
-  position: fixed; inset: 0; pointer-events: none; z-index: 1;
-  background: radial-gradient(ellipse 80% 80% at 50% 50%, transparent 50%, rgba(0,0,0,.35) 100%);
-}
-[data-theme="light"] .vignette { opacity: 0; }
-
-/* ── Timeline rail ───────────────────────────────────────────────────────── */
-.tl-rail {
-  position: absolute; left: 0; top: 0; bottom: 0; width: 1px;
-  background: linear-gradient(to bottom, transparent, currentColor 15%, currentColor 85%, transparent);
-  opacity: .12;
+/* Con movimiento reducido, las transiciones CSS casi no duran. GSAP ya se omite via matchMedia. */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
 }
 
-/* ── Work card screenshot frame ──────────────────────────────────────────── */
-.work-screenshot {
-  position: absolute; inset: 24px; border-radius: 10px;
-  display: flex; flex-direction: column; overflow: hidden;
-  border: 0.5px solid rgba(255,255,255,.12);
-  background: #0f0f16;
+/* Persianas de la apertura tipo cine: solo existen si hay movimiento permitido (cubren la imagen hasta que GSAP las abre). */
+.story-bar { display: none; }
+@media (prefers-reduced-motion: no-preference) {
+  .story-bar { display: block; }
 }
-[data-theme="light"] .work-screenshot { border-color: rgba(27,34,64,.12); background: #f0ece4; }
-.work-screenshot img { flex: 1; width: 100%; height: 100%; object-fit: cover; object-position: top left; }
 
-/* ── Mock bar dots ───────────────────────────────────────────────────────── */
-.mock-bar-dark  .mock-dot { background: rgba(255,255,255,.18); }
-.mock-bar-light .mock-dot { background: rgba(27,34,64,.18); }
-
-/* ── Lang switch thumb ───────────────────────────────────────────────────── */
-.lang-thumb { transition: transform .25s cubic-bezier(.4,0,.2,1); }
-
-/* ── Reveal animation base ───────────────────────────────────────────────── */
-.reveal-hidden { opacity: 0; transform: translateY(20px); }
-.reveal-shown  { opacity: 1; transform: translateY(0); transition: opacity .7s cubic-bezier(.2,.8,.2,1), transform .7s cubic-bezier(.2,.8,.2,1); }
+/* Las transiciones de historia ocupan una pantalla solo si hay movimiento permitido (ahi se fijan y se acercan). */
+@media (prefers-reduced-motion: no-preference) {
+  .story-band { min-height: 100dvh; }
+  /* La seccion siguiente sube mientras el cuadro se desvanece, para que no quede una pantalla vacia. */
+  .pin-spacer:has(> .story-band) + * { margin-top: -34dvh; }
+}
