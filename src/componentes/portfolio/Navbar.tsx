@@ -152,7 +152,7 @@ export function Navbar() {
               tabIndex={scrolled ? -1 : 0}
               aria-hidden={scrolled}
               className={[
-                "hidden rounded-control px-3 py-2 text-sm font-semibold text-ink transition-opacity duration-300 lg:block",
+                "hidden rounded-control px-3 py-2 text-sm font-semibold text-white/85 transition duration-300 hover:text-white lg:block",
                 scrolled ? "pointer-events-none opacity-0" : "opacity-100",
               ].join(" ")}
             >

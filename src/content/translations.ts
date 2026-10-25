@@ -6,8 +6,9 @@ export type Lang = "es" | "en";
 const es = {
   nav: { about: "Sobre mí", skills: "Servicios", career: "Trayectoria", work: "Proyectos", stack: "Stack", contact: "Contacto" },
   hero: {
-    greeting: "Soy",
     name: "Carlos Barrera",
+    nameTop: "Carlos",
+    nameBottom: "Barrera",
     role: "Desarrollador Full Stack",
     hint: "Mueve el cursor para llamarme",
     hintTouch: "Tócame para saludarte",
@@ -105,8 +106,9 @@ export type Dict = typeof es;
 const en: Dict = {
   nav: { about: "About", skills: "Services", career: "Career", work: "Work", stack: "Stack", contact: "Contact" },
   hero: {
-    greeting: "I'm",
     name: "Carlos Barrera",
+    nameTop: "Carlos",
+    nameBottom: "Barrera",
     role: "Full Stack Developer",
     hint: "Move cursor to call me!",
     hintTouch: "Tap me to say hi",

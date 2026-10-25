@@ -27,6 +27,40 @@ const GREET_CUES: [number, MsgKey][] = [
 const GREET_BACK = 47;
 const RETURN_SPEED = 1.5;
 
+// Logos del stack flotando alrededor del personaje. depth > 1 va delante (mas grande y desenfocado,
+// como un objeto cerca de la camara); depth < 1 va detras, lejos. `mobile` los deja en pantallas chicas;
+// `invert` aclara los logos negros (Next.js) para que se vean sobre el fondo oscuro.
+const LOGOS = [
+  { src: "javascript", pos: "left-[6%] top-[18%]", size: "size-12 md:size-14", rot: -14, depth: 0.8, mobile: true },
+  { src: "php", pos: "left-[27%] top-[9%]", size: "size-9 md:size-11", rot: 12, depth: 0.6 },
+  { src: "laravel", pos: "right-[7%] top-[14%]", size: "size-12 md:size-16", rot: 10, depth: 0.9, mobile: true },
+  { src: "postgresql", pos: "right-[27%] top-[6%]", size: "size-9 md:size-12", rot: -8, depth: 0.6 },
+  { src: "react", pos: "left-[15%] top-[58%]", size: "size-11 md:size-14", rot: 18, depth: 0.85, mobile: true },
+  { src: "typescript", pos: "right-[18%] top-[55%]", size: "size-10 md:size-12", rot: -12, depth: 0.75, mobile: true },
+  { src: "html-5", pos: "left-[4%] top-[80%]", size: "size-10 md:size-12", rot: -6, depth: 0.7 },
+  { src: "css-3", pos: "right-[4%] top-[74%]", size: "size-10 md:size-12", rot: 14, depth: 0.7 },
+  { src: "react", pos: "left-[27%] bottom-[9%]", size: "size-16 md:size-24", rot: -20, depth: 1.6, blur: true },
+  { src: "codeigneiter3", pos: "right-[12%] -bottom-[3%]", size: "size-16 md:size-28", rot: 24, depth: 1.8, blur: true, mobile: true },
+  { src: "next-js", pos: "right-[3%] top-[40%]", size: "size-10", rot: -12, depth: 0.55, invert: true },
+  { src: "javascript", pos: "left-[42%] top-[13%]", size: "size-7", rot: 20, depth: 0.45, faint: true },
+] as const;
+
+// Codigo decorativo del fondo: textura de ingenieria, casi transparente y solo en escritorio.
+const CODE_LEFT = `const developer = {
+  name: "Carlos Barrera",
+  role: "Full Stack",
+  stack: ["Laravel", "Next.js", "PostgreSQL"],
+  location: "Cartagena, CO",
+};
+
+export default developer;`;
+const CODE_RIGHT = `SELECT project, status
+FROM portfolio
+WHERE quality = 'high'
+ORDER BY impact DESC;
+
+-- 200 OK`;
+
 const frameSrc = (c: ClipName, i: number) => `/hero/${c}/${String(i).padStart(3, "0")}.webp`;
 
 // Las zonas solo existen con raton y pantalla ancha; en tactil el saludo se lanza solo o con un toque.
@@ -54,10 +88,46 @@ export function Hero() {
 
   useGSAP(
     () => {
+      const el = root.current;
+      if (!el) return;
       const mm = gsap.matchMedia();
       mm.add(CON_MOVIMIENTO, () => {
-        gsap.from(".hero-in", { autoAlpha: 0, y: 18, duration: 0.8, stagger: 0.12, delay: 0.15, ease: "power3.out" });
-        gsap.from(".hero-figure", { autoAlpha: 0, y: 40, scale: 0.97, transformOrigin: "50% 100%", duration: 1.1, ease: "power3.out" });
+        gsap.from(".hero-name-line", { yPercent: 110, duration: 1, stagger: 0.12, ease: "power4.out" });
+        gsap.from(".hero-in", { autoAlpha: 0, y: 14, duration: 0.7, stagger: 0.1, delay: 0.6, ease: "power3.out" });
+        gsap.from(".hero-figure", { autoAlpha: 0, y: 60, duration: 1.1, delay: 0.15, ease: "power3.out" });
+        gsap.from(".hero-logo-pop", { scale: 0, rotate: -40, duration: 0.9, stagger: 0.05, delay: 0.4, ease: "back.out(2)" });
+
+        // Cada logo flota a su ritmo; los de delante se mueven mas, como objetos cerca de la camara.
+        gsap.utils.toArray<HTMLElement>(".hero-logo-float").forEach((logo, i) => {
+          const depth = Number(logo.dataset.depth ?? 1);
+          gsap.to(logo, {
+            y: (i % 2 ? 1 : -1) * 14 * depth,
+            rotate: (i % 2 ? -1 : 1) * 10,
+            duration: 2.6 + (i % 4) * 0.5,
+            ease: "sine.inOut",
+            yoyo: true,
+            repeat: -1,
+            delay: 1 + i * 0.12,
+          });
+        });
+
+        // Parallax con el puntero: los logos cercanos se desplazan mas que los lejanos.
+        const drift = gsap.utils.toArray<HTMLElement>(".hero-logo").map((logo) => ({
+          depth: Number(logo.dataset.depth ?? 1),
+          x: gsap.quickTo(logo, "x", { duration: 1.2, ease: "power3.out" }),
+          y: gsap.quickTo(logo, "y", { duration: 1.2, ease: "power3.out" }),
+        }));
+        const onMove = (e: PointerEvent) => {
+          const r = el.getBoundingClientRect();
+          const nx = (e.clientX - r.left) / r.width - 0.5;
+          const ny = (e.clientY - r.top) / r.height - 0.5;
+          drift.forEach((d) => {
+            d.x(-nx * 40 * d.depth);
+            d.y(-ny * 28 * d.depth);
+          });
+        };
+        el.addEventListener("pointermove", onMove);
+        return () => el.removeEventListener("pointermove", onMove);
       });
       return () => mm.revert();
     },
@@ -347,62 +417,93 @@ export function Hero() {
     };
   }, []);
 
-  return (
-    <section id="top" ref={root} className="hero-stage relative isolate flex flex-col overflow-hidden pt-16 lg:min-h-[100svh]">
-      <div aria-hidden="true" className="hero-glow pointer-events-none absolute left-1/2 top-[58%] -z-10 size-[min(115vw,64rem)] -translate-x-1/2 -translate-y-1/2" />
-
-      <div className="relative mx-auto flex w-full max-w-7xl flex-1 flex-col px-4 md:px-8">
-        {/* Nota: arriba y centrada en movil y tablet, a la izquierda en escritorio */}
-        <div className="relative z-10 pt-6 text-center lg:absolute lg:left-8 lg:top-1/2 lg:max-w-[15rem] lg:-translate-y-1/2 lg:pt-0 lg:text-left xl:max-w-[19rem]">
-          <h1 className="hero-in text-[color:var(--hero-ink)]">
-            <span className="block font-serif text-[2.4rem] leading-none tracking-tight md:text-5xl xl:text-[3.4rem]">
-              {t.hero.greeting} <em className="italic">{t.hero.name}</em>
-            </span>
-            <span className="mt-3 block text-[0.7rem] font-semibold uppercase tracking-[0.32em] text-[color:var(--hero-muted)] md:text-xs">
-              {t.hero.role}
-            </span>
-          </h1>
-          <p className="hero-in mt-5 inline-flex items-center gap-3 text-sm text-[color:var(--hero-muted)] lg:mt-8">
-            <span aria-hidden="true" className="hero-hint relative hidden h-7 w-16 shrink-0 lg:block">
-              <span className="absolute inset-x-1 bottom-1 flex justify-between">
-                <i className="size-1 rounded-full bg-current opacity-50" />
-                <i className="size-1 rounded-full bg-current opacity-50" />
-                <i className="size-1 rounded-full bg-current opacity-50" />
-              </span>
-              <Cursor size={18} weight="fill" className="hero-hint-cursor absolute left-1/2 top-0 -ml-2 text-[color:var(--hero-ink)]" />
-            </span>
-            <HandTap aria-hidden="true" size={18} weight="duotone" className="hero-hint-tap lg:hidden" />
-            <span className="hidden lg:inline">{t.hero.hint}</span>
-            <span className="lg:hidden">{t.hero.hintTouch}</span>
-          </p>
-        </div>
-
-        {/* Personaje con la laptop: ancla visual del hero, pegado al borde inferior */}
-        <div className="hero-figure relative mt-4 aspect-[3/4] w-[min(100%,calc((100svh-15rem)*0.75))] self-center md:w-[min(80%,calc((100svh-16rem)*0.75))] lg:mx-auto lg:mt-auto lg:w-auto lg:h-[min(calc(100svh-5.5rem),56rem)]">
-          {/* Primer frame como poster mientras carga el canvas */}
-          <img
-            ref={posterRef}
-            src={frameSrc("idle", 0)}
-            alt=""
-            aria-hidden="true"
-            fetchPriority="high"
-            className="absolute inset-0 size-full select-none"
-            draggable={false}
-          />
-          <canvas
-            ref={canvasRef}
-            width={FRAME.w}
-            height={FRAME.h}
-            role="img"
-            aria-label={t.hero.photoAlt}
-            className="absolute inset-0 size-full cursor-pointer"
-          />
-          <div ref={bubbleRef} aria-hidden="true" data-side="center" className="hero-bubble pointer-events-none absolute invisible opacity-0">
-            <span ref={bubbleText} />
+  const logos = (front: boolean) =>
+    LOGOS.filter((l) => ("blur" in l) === front).map((l, i) => (
+      <div
+        key={`${l.src}-${i}`}
+        aria-hidden="true"
+        data-depth={l.depth}
+        className={`hero-logo pointer-events-none absolute ${l.pos} ${"mobile" in l ? "" : "hidden md:block"}`}
+      >
+        <div className="hero-logo-pop">
+          <div className="hero-logo-float" data-depth={l.depth} style={{ rotate: `${l.rot}deg` }}>
+            <img
+              src={`/habilidades/${l.src}.svg`}
+              alt=""
+              draggable={false}
+              className={`${l.size} select-none drop-shadow-[0_10px_18px_rgb(0_0_0_/_0.5)] ${front ? "blur-[3px] md:blur-[4px]" : ""} ${"faint" in l ? "opacity-70 blur-[1.5px]" : ""} ${"invert" in l ? "invert" : ""}`}
+            />
           </div>
         </div>
       </div>
-      <div aria-hidden="true" className="hero-floor pointer-events-none absolute inset-x-0 bottom-0 -z-10 h-24" />
+    ));
+
+  return (
+    <section id="top" ref={root} className="hero-stage relative isolate h-[100svh] min-h-[36rem] overflow-hidden">
+      {/* Fondo: cuadricula tecnica, codigo tenue y brillo calido detras del personaje */}
+      <div aria-hidden="true" className="hero-grid pointer-events-none absolute inset-0" />
+      <div aria-hidden="true" className="hero-glow pointer-events-none absolute inset-x-0 bottom-0 h-[75%]" />
+      <pre aria-hidden="true" className="hero-code pointer-events-none absolute left-8 top-[36%] hidden xl:block">{CODE_LEFT}</pre>
+      <pre aria-hidden="true" className="hero-code pointer-events-none absolute right-8 top-[32%] hidden text-right xl:block">{CODE_RIGHT}</pre>
+
+      {/* Nombre gigante detras del personaje, como titular del hero */}
+      <h1 className="hero-name pointer-events-none absolute inset-x-0 top-20 z-0 select-none text-center md:top-[4.5rem]">
+        <span className="sr-only">{`${t.hero.name}, ${t.hero.role}`}</span>
+        <span aria-hidden="true" className="block overflow-hidden">
+          <span className="hero-name-line block">{t.hero.nameTop}</span>
+        </span>
+        <span aria-hidden="true" className="block overflow-hidden">
+          <span className="hero-name-line block">{t.hero.nameBottom}</span>
+        </span>
+      </h1>
+
+      {logos(false)}
+
+      {/* Personaje con la laptop, delante del nombre y pegado al borde inferior. En movil y tablet la altura
+          tambien se limita para que la cabeza (a ~20% del frame) quede debajo del rol y la instruccion. */}
+      <div className="hero-figure absolute bottom-0 left-1/2 z-10 aspect-[3/4] h-[min(76svh,calc(100vw*1.38),calc((100svh-8rem-var(--name-size)*1.84)/0.8))] -translate-x-1/2 lg:h-[min(78svh,52rem)]">
+        {/* Primer frame como poster mientras carga el canvas */}
+        <img
+          ref={posterRef}
+          src={frameSrc("idle", 0)}
+          alt=""
+          aria-hidden="true"
+          fetchPriority="high"
+          className="absolute inset-0 size-full select-none"
+          draggable={false}
+        />
+        <canvas
+          ref={canvasRef}
+          width={FRAME.w}
+          height={FRAME.h}
+          role="img"
+          aria-label={t.hero.photoAlt}
+          className="absolute inset-0 size-full cursor-pointer"
+        />
+        <div ref={bubbleRef} aria-hidden="true" data-side="center" className="hero-bubble pointer-events-none absolute invisible opacity-0">
+          <span ref={bubbleText} />
+        </div>
+      </div>
+
+      <div className="absolute inset-0 z-20 pointer-events-none">{logos(true)}</div>
+
+      {/* Rol e instruccion, discretos abajo a la izquierda */}
+      <div className="hero-meta pointer-events-none absolute z-30">
+        <p className="hero-in text-[0.68rem] font-semibold uppercase tracking-[0.3em] text-[color:var(--hero-ink)] md:text-xs">{t.hero.role}</p>
+        <p className="hero-in mt-2 flex items-center gap-3 text-xs text-[color:var(--hero-muted)] md:text-sm">
+          <span aria-hidden="true" className="hero-hint relative hidden h-7 w-16 shrink-0 lg:block">
+            <span className="absolute inset-x-1 bottom-1 flex justify-between">
+              <i className="size-1 rounded-full bg-current opacity-50" />
+              <i className="size-1 rounded-full bg-current opacity-50" />
+              <i className="size-1 rounded-full bg-current opacity-50" />
+            </span>
+            <Cursor size={18} weight="fill" className="hero-hint-cursor absolute left-1/2 top-0 -ml-2 text-[color:var(--hero-ink)]" />
+          </span>
+          <HandTap aria-hidden="true" size={16} weight="duotone" className="hero-hint-tap lg:hidden" />
+          <span className="hidden lg:inline">{t.hero.hint}</span>
+          <span className="lg:hidden">{t.hero.hintTouch}</span>
+        </p>
+      </div>
     </section>
   );
 }

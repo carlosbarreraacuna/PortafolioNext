@@ -51,7 +51,7 @@
 
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
   --font-display: var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
-  --font-serif: var(--font-instrument), ui-serif, Georgia, serif;
+  --font-poster: var(--font-anton), Impact, "Arial Narrow", sans-serif;
 
   /* Forma: controles 16px, paneles 28px. Sin otros radios en la pagina. */
   --radius-control: 1rem;
@@ -175,31 +175,59 @@ body::after {
 }
 .skip-link:focus { transform: translateY(0); }
 
-/* Hero: escenario propio en rosa polvoso y marron claro hacia los bordes, casi blanco detras del personaje. */
+/* Hero tipo cartel sobre un fondo de ingenieria: azul tinta profundo con cuadricula tecnica.
+   Es oscuro en ambos temas para que el personaje calido, el nombre y los logos a color resalten. */
 .hero-stage {
-  --hero-ink: #3b1d26;
-  --hero-muted: #7b4853;
-  --hero-bubble: rgb(255 255 255 / 0.82);
-  --hero-bubble-line: rgb(150 92 104 / 0.28);
+  --hero-ink: #e8eef9;
+  --hero-muted: #9eabc7;
+  --hero-bubble: rgb(255 255 255 / 0.95);
+  --hero-bubble-line: rgb(255 255 255 / 0.6);
   background:
-    radial-gradient(ellipse 72% 88% at 50% 60%, #fffafa 0%, #f8e9e9 34%, #e8c6c9 60%, #cf9ea5 82%, #b07a84 100%);
+    radial-gradient(ellipse 45% 40% at 16% 14%, rgb(56 189 248 / 0.13), transparent 70%),
+    radial-gradient(ellipse 90% 85% at 50% 45%, #15213b 0%, #0d1528 55%, #080c17 100%);
 }
-[data-theme="dark"] .hero-stage {
-  --hero-ink: #fbeef0;
-  --hero-muted: #dcb4bb;
-  --hero-bubble: rgb(255 248 248 / 0.92);
-  --hero-bubble-line: rgb(255 255 255 / 0.5);
-  background:
-    radial-gradient(ellipse 72% 88% at 50% 60%, #7d4b56 0%, #5a313c 36%, #3b1f28 66%, #22121a 100%);
+.hero-grid {
+  background-image:
+    linear-gradient(rgb(148 180 255 / 0.075) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(148 180 255 / 0.075) 1px, transparent 1px);
+  background-size: 56px 56px;
+  background-position: center top;
+  mask-image: radial-gradient(ellipse 80% 75% at 50% 40%, #000 25%, transparent 100%);
 }
+/* Brillo calido (el acento naranja del sitio) que separa al personaje del fondo */
 .hero-glow {
-  background: radial-gradient(circle, rgb(255 255 255 / 0.98) 0%, rgb(255 255 255 / 0.75) 26%, rgb(255 255 255 / 0) 62%);
+  background: radial-gradient(ellipse 34% 55% at 50% 72%, rgb(242 107 58 / 0.38) 0%, rgb(242 107 58 / 0.12) 45%, transparent 75%);
 }
-[data-theme="dark"] .hero-glow {
-  background: radial-gradient(circle, rgb(255 240 242 / 0.85) 0%, rgb(255 225 230 / 0.35) 28%, rgb(255 225 230 / 0) 60%);
+.hero-code {
+  color: rgb(158 190 255 / 0.16);
+  font-family: ui-monospace, "Cascadia Code", "SF Mono", Menlo, Consolas, monospace;
+  font-size: 0.8rem;
+  line-height: 1.7;
 }
-/* El hero se funde con el fondo de la pagina antes de la siguiente seccion. */
-.hero-floor { background: linear-gradient(to bottom, transparent, var(--canvas)); }
+.hero-name-line {
+  background: linear-gradient(180deg, #f6f8fc 0%, #c9d3e6 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.hero-stage { --name-size: min(25vw, 26svh); }
+@media (min-width: 1024px) {
+  .hero-stage { --name-size: min(22vw, 31svh); }
+}
+.hero-name {
+  font-family: var(--font-poster);
+  font-size: var(--name-size);
+  line-height: 0.92;
+  text-transform: uppercase;
+}
+/* Rol e instruccion: debajo del nombre en movil y tablet; abajo a la izquierda en escritorio. */
+.hero-meta { inset-inline: 0; top: calc(5rem + var(--name-size) * 1.84 + 0.5rem); text-align: center; }
+.hero-meta > p:last-child { justify-content: center; }
+@media (min-width: 1024px) {
+  .hero-meta { inset-inline: 2rem auto; top: auto; bottom: 2rem; text-align: left; }
+  .hero-meta > p:last-child { justify-content: flex-start; }
+}
 
 .hero-bubble {
   max-width: min(15rem, 46%);
@@ -222,7 +250,7 @@ body::after {
 .hero-bubble[data-side="right"] { left: 67%; top: 17%; border-bottom-left-radius: 0.25rem; }
 @media (max-width: 1023px) {
   .hero-bubble { white-space: normal; }
-  .hero-bubble[data-side="center"] { left: auto; right: 0; top: 8%; }
+  .hero-bubble[data-side="center"] { left: auto; right: 0; top: 17%; }
 }
 
 /* Indicador de cursor: recorre izquierda, centro y derecha para insinuar las tres zonas. */

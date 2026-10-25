@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Inter, Instrument_Serif, Plus_Jakarta_Sans } from "next/font/google";
+import { Anton, Inter, Plus_Jakarta_Sans } from "next/font/google";
 import { I18nProvider } from "@/componentes/portfolio/I18nProvider";
 import "./globals.css";
 
@@ -16,11 +16,11 @@ const jakarta = Plus_Jakarta_Sans({
   display: "swap",
 });
 
-const serif = Instrument_Serif({
+// Titular gigante del hero: condensada y pesada, como un cartel.
+const anton = Anton({
   subsets: ["latin"],
   weight: "400",
-  style: ["normal", "italic"],
-  variable: "--font-instrument",
+  variable: "--font-anton",
   display: "swap",
 });
 
@@ -48,7 +48,7 @@ const themeScript = `(function(){try{var t=localStorage.getItem("cb-theme");if(t
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="es" suppressHydrationWarning className={`${inter.variable} ${jakarta.variable} ${serif.variable}`}>
+    <html lang="es" suppressHydrationWarning className={`${inter.variable} ${jakarta.variable} ${anton.variable}`}>
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
       </head>
