@@ -5,29 +5,36 @@ import { Cursor, HandTap } from "@phosphor-icons/react";
 import { CON_MOVIMIENTO, gsap, useGSAP } from "@/lib/gsap";
 import { useI18n } from "./I18nProvider";
 
-// Frames renderizados con Remotion desde /animation (npm run render). Si cambian los clips alla,
-// estas cantidades deben coincidir con CLIPS de animation/src/pose.ts.
-const FPS = 20;
-const CLIPS = { idle: 40, lookLeft: 13, lookRight: 13, greet: 89, greetOut: 36 } as const;
-const FRAME = { w: 760, h: 923 };
+// Frames sacados de los videos del personaje (animation/video, `node extract.mjs`). Las cantidades y
+// los momentos clave cuentan desde el primer frame que conserva extract.mjs.
+const FPS = 12;
+const CLIPS = { idle: 62, lookLeft: 48, lookRight: 48, greet: 100 } as const;
+const FRAME = { w: 480, h: 640 };
 type ClipName = keyof typeof CLIPS;
 type Zone = "left" | "center" | "right";
 type MsgKey = "left" | "right" | "hey" | "hi" | "check";
+
+// Frame de los giros en que la mirada llega al lado: ahi se sostiene la reaccion.
+const LOOK_PEAK = 14;
+// Saludo: frame en que aparece cada frase (te mira, mano arriba, senala hacia abajo).
+const GREET_CUES: [number, MsgKey][] = [
+  [6, "hey"],
+  [51, "hi"],
+  [83, "check"],
+];
+// Para volver al trabajo se salta (con fundido) a cuando tiene las manos en los audifonos y se
+// reproduce el saludo al reves: se los pone y baja la mirada, sin repetir el saludo de mano.
+const GREET_BACK = 47;
+const RETURN_SPEED = 1.5;
 
 const frameSrc = (c: ClipName, i: number) => `/hero/${c}/${String(i).padStart(3, "0")}.webp`;
 
 // Las zonas solo existen con raton y pantalla ancha; en tactil el saludo se lanza solo o con un toque.
 const CON_ZONAS = "(hover: hover) and (pointer: fine) and (min-width: 1024px)";
-// Frame del saludo en que aparece cada frase: mirada, mano arriba, senala hacia abajo.
-const GREET_CUES: [number, MsgKey][] = [
-  [0, "hey"],
-  [42, "hi"],
-  [74, "check"],
-];
-const HOLD_LOOK = 2600;
-const HOLD_GREET = 2400;
+const HOLD_LOOK = 2400;
+const HOLD_GREET = 2200;
 const HOLD_MIN = 700; // aunque el cursor cambie de zona, la reaccion se sostiene al menos esto
-const BLEND = 0.16; // segundos de fundido al cambiar de clip
+const BLEND = 0.28; // segundos de fundido al cambiar de clip o saltar dentro de uno
 
 export function Hero() {
   const { t } = useI18n();
@@ -108,10 +115,13 @@ export function Hero() {
       });
     };
 
-    // ── Reproductor: clip actual, posicion en frames (decimal) y sentido ──
+    // ── Reproductor: recorre un tramo [from → to] de un clip, o el trabajo en bucle ──
     let clip: ClipName = "idle";
     let pos = 0;
+    let to = 0;
     let dir: 1 | -1 = 1;
+    let speed = 1;
+    let looping = true;
     let playing = true;
     let onEnd: (() => void) | null = null;
     let fadeFrom: { clip: ClipName; pos: number } | null = null;
@@ -120,7 +130,7 @@ export function Hero() {
 
     const index = (c: ClipName, i: number) => (c === "idle" ? ((i % CLIPS.idle) + CLIPS.idle) % CLIPS.idle : Math.max(0, Math.min(CLIPS[c] - 1, i)));
 
-    // Interpola entre el frame actual y el siguiente con un fundido: a 20 fps se ve continuo a 60 Hz.
+    // Interpola entre el frame actual y el siguiente con un fundido: a 12 fps se ve continuo a 60 Hz.
     const drawClip = (c: ClipName, p: number, alpha: number) => {
       const list = frames[c];
       const i = Math.floor(p);
@@ -135,17 +145,32 @@ export function Hero() {
       }
     };
 
-    const play = (c: ClipName, d: 1 | -1, then: (() => void) | null) => {
-      if (c !== clip && !reduce) {
+    // Cualquier corte (otro clip o un salto dentro del mismo) se cubre con un fundido desde lo que se veia.
+    const cut = (c: ClipName, from: number) => {
+      if (!reduce && (c !== clip || Math.abs(from - pos) > 1.5)) {
         fadeFrom = { clip, pos };
         fade = 1;
       }
       clip = c;
-      dir = d;
-      pos = d > 0 ? 0 : CLIPS[c] - 1;
-      playing = !(reduce && c === "idle");
-      onEnd = then;
+      pos = from;
       cue = 0;
+    };
+
+    const play = (c: ClipName, from: number, end: number, rate: number, then: () => void) => {
+      cut(c, from);
+      to = end;
+      dir = end >= from ? 1 : -1;
+      speed = rate;
+      looping = false;
+      playing = true;
+      onEnd = then;
+    };
+
+    const loopIdle = () => {
+      cut("idle", 0);
+      looping = true;
+      playing = !reduce;
+      onEnd = null;
     };
 
     // ── Pausas sostenidas, que se acortan si el visitante ya cambio de zona ──
@@ -177,7 +202,7 @@ export function Hero() {
 
     const done = () => {
       busy = false;
-      play("idle", 1, null);
+      loopIdle();
       if (pending) {
         const next = pending;
         pending = null;
@@ -186,28 +211,27 @@ export function Hero() {
     };
 
     const react = (z: Zone) => {
-      const needs: ClipName[] = z === "center" ? ["greet", "greetOut"] : [z === "left" ? "lookLeft" : "lookRight"];
-      if (!needs.every((c) => ready[c])) {
+      const c: ClipName = z === "center" ? "greet" : z === "left" ? "lookLeft" : "lookRight";
+      if (!ready[c]) {
         pending = z;
         return;
       }
       busy = true;
       pending = null;
-      if (z === "center") {
-        play("greet", 1, () =>
+      if (c === "greet") {
+        play("greet", 0, CLIPS.greet - 1, 1, () =>
           hold(HOLD_GREET, () => {
             say(null);
-            play("greetOut", 1, done);
+            play("greet", GREET_BACK, 0, RETURN_SPEED, done);
           }),
         );
         return;
       }
-      const look: ClipName = z === "left" ? "lookLeft" : "lookRight";
-      say(z);
-      play(look, 1, () =>
+      say(z === "left" ? "left" : "right");
+      play(c, 0, LOOK_PEAK, 1, () =>
         hold(HOLD_LOOK, () => {
           say(null);
-          play(look, -1, done);
+          play(c, LOOK_PEAK, CLIPS[c] - 1, 1, done);
         }),
       );
     };
@@ -228,24 +252,26 @@ export function Hero() {
     // ── Bucle de dibujo ──
     let raf = 0;
     let last = 0;
-    const speed = reduce ? 1000 : 1; // con movimiento reducido cada clip salta a su pose final
+    const boost = reduce ? 1000 : 1; // con movimiento reducido cada tramo salta a su pose final
 
     const tick = (now: number) => {
       const dt = last ? Math.min(0.05, (now - last) / 1000) : 0;
       last = now;
       if (playing) {
-        pos += dt * FPS * dir * speed;
-        const n = CLIPS[clip];
-        if (clip === "idle" && !onEnd) pos = ((pos % n) + n) % n;
-        else if ((dir > 0 && pos >= n - 1) || (dir < 0 && pos <= 0)) {
-          pos = dir > 0 ? n - 1 : 0;
-          playing = false;
-          const then = onEnd;
-          onEnd = null;
-          then?.();
+        if (looping) {
+          pos = (pos + dt * FPS) % CLIPS[clip];
+        } else {
+          pos += dt * FPS * speed * dir * boost;
+          if ((pos - to) * dir >= 0) {
+            pos = to;
+            playing = false;
+            const then = onEnd;
+            onEnd = null;
+            then?.();
+          }
         }
       }
-      if (clip === "greet") {
+      if (clip === "greet" && dir > 0) {
         while (cue < GREET_CUES.length && pos >= GREET_CUES[cue][0]) say(GREET_CUES[cue++][1]);
       }
       fade = Math.max(0, fade - dt / BLEND);
@@ -296,10 +322,10 @@ export function Hero() {
     load("idle")
       .then(() => {
         if (disposed) return;
-        canvas.dataset.ready = "true";
+        loopIdle();
         if (posterRef.current) posterRef.current.style.visibility = "hidden";
         if (onScreen) start();
-        return Promise.all([load("lookLeft"), load("lookRight"), load("greet"), load("greetOut")]);
+        return Promise.all([load("lookLeft"), load("lookRight"), load("greet")]);
       })
       .then(() => {
         if (disposed) return;
@@ -327,7 +353,7 @@ export function Hero() {
 
       <div className="relative mx-auto flex w-full max-w-7xl flex-1 flex-col px-4 md:px-8">
         {/* Nota: arriba y centrada en movil y tablet, a la izquierda en escritorio */}
-        <div className="relative z-10 pt-6 text-center lg:absolute lg:left-8 lg:top-1/2 lg:max-w-[17rem] lg:-translate-y-1/2 lg:pt-0 lg:text-left xl:max-w-[19rem]">
+        <div className="relative z-10 pt-6 text-center lg:absolute lg:left-8 lg:top-1/2 lg:max-w-[15rem] lg:-translate-y-1/2 lg:pt-0 lg:text-left xl:max-w-[19rem]">
           <h1 className="hero-in text-[color:var(--hero-ink)]">
             <span className="block font-serif text-[2.4rem] leading-none tracking-tight md:text-5xl xl:text-[3.4rem]">
               {t.hero.greeting} <em className="italic">{t.hero.name}</em>
@@ -337,7 +363,7 @@ export function Hero() {
             </span>
           </h1>
           <p className="hero-in mt-5 inline-flex items-center gap-3 text-sm text-[color:var(--hero-muted)] lg:mt-8">
-            <span aria-hidden="true" className="hero-hint relative hidden h-7 w-16 lg:block">
+            <span aria-hidden="true" className="hero-hint relative hidden h-7 w-16 shrink-0 lg:block">
               <span className="absolute inset-x-1 bottom-1 flex justify-between">
                 <i className="size-1 rounded-full bg-current opacity-50" />
                 <i className="size-1 rounded-full bg-current opacity-50" />
@@ -351,9 +377,8 @@ export function Hero() {
           </p>
         </div>
 
-        {/* Personaje con la laptop: ancla visual del hero, pegado al borde inferior. En movil el frame
-            desborda un poco el ancho (sus bordes son transparentes) para que la laptop se vea grande. */}
-        <div className="hero-figure relative mt-4 aspect-[760/923] w-[min(112%,calc((100svh-15rem)*0.823))] self-center md:w-[min(92%,calc((100svh-16rem)*0.823))] lg:mx-auto lg:mt-auto lg:w-auto lg:h-[min(calc(100svh-5rem),58rem)]">
+        {/* Personaje con la laptop: ancla visual del hero, pegado al borde inferior */}
+        <div className="hero-figure relative mt-4 aspect-[3/4] w-[min(100%,calc((100svh-15rem)*0.75))] self-center md:w-[min(80%,calc((100svh-16rem)*0.75))] lg:mx-auto lg:mt-auto lg:w-auto lg:h-[min(calc(100svh-5.5rem),56rem)]">
           {/* Primer frame como poster mientras carga el canvas */}
           <img
             ref={posterRef}

@@ -217,12 +217,12 @@ body::after {
   backdrop-filter: blur(8px);
 }
 /* Posicion del globo segun la reaccion: junto a la cabeza, del lado hacia el que mira. */
-.hero-bubble[data-side="center"] { left: 64%; top: 7%; border-bottom-left-radius: 0.25rem; }
-.hero-bubble[data-side="left"] { right: 73%; top: 14%; border-bottom-right-radius: 0.25rem; }
-.hero-bubble[data-side="right"] { left: 73%; top: 14%; border-bottom-left-radius: 0.25rem; }
+.hero-bubble[data-side="center"] { left: 63%; top: 12%; border-bottom-left-radius: 0.25rem; }
+.hero-bubble[data-side="left"] { right: 67%; top: 17%; border-bottom-right-radius: 0.25rem; }
+.hero-bubble[data-side="right"] { left: 67%; top: 17%; border-bottom-left-radius: 0.25rem; }
 @media (max-width: 1023px) {
   .hero-bubble { white-space: normal; }
-  .hero-bubble[data-side="center"] { left: auto; right: 0; top: 3%; }
+  .hero-bubble[data-side="center"] { left: auto; right: 0; top: 8%; }
 }
 
 /* Indicador de cursor: recorre izquierda, centro y derecha para insinuar las tres zonas. */

@@ -1,16 +1,11 @@
 {
-  "name": "carlos-hero-animation",
+  "name": "carlos-hero-frames",
   "private": true,
-  "description": "Frames del personaje del hero, renderizados con Remotion",
+  "description": "Frames del personaje del hero: videos 3D (Higgsfield) con fondo verde a WebP con transparencia. Requiere ffmpeg.",
   "scripts": {
-    "studio": "remotion studio src/index.ts",
-    "render": "node render.mjs"
+    "extract": "node extract.mjs"
   },
   "dependencies": {
-    "@remotion/cli": "^4.0.538",
-    "react": "^19.3.1",
-    "react-dom": "^19.3.1",
-    "remotion": "^4.0.538",
     "sharp": "^0.35.5"
   }
 }
