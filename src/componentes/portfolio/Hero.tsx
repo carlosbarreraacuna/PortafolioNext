@@ -3,6 +3,7 @@
 import { useEffect, useRef } from "react";
 import { Cursor, HandTap } from "@phosphor-icons/react";
 import { CON_MOVIMIENTO, gsap, useGSAP } from "@/lib/gsap";
+import { scrollToId } from "@/lib/motion";
 import { useI18n } from "./I18nProvider";
 
 // Frames sacados de los videos del personaje (animation/video, `node extract.mjs`). Las cantidades y
@@ -489,8 +490,8 @@ export function Hero() {
 
       {/* Rol e instruccion, discretos abajo a la izquierda */}
       <div className="hero-meta pointer-events-none absolute z-30">
-        <p className="hero-in text-[0.68rem] font-semibold uppercase tracking-[0.3em] text-[color:var(--hero-ink)] md:text-xs">{t.hero.role}</p>
-        <p className="hero-in mt-2 flex items-center gap-3 text-xs text-[color:var(--hero-muted)] md:text-sm">
+        <p className="hero-in text-body font-semibold text-[color:var(--hero-ink)]">{t.hero.role}</p>
+        <p className="hero-in mt-1 flex items-center gap-3 text-small text-[color:var(--hero-muted)]">
           <span aria-hidden="true" className="hero-hint relative hidden h-7 w-16 shrink-0 lg:block">
             <span className="absolute inset-x-1 bottom-1 flex justify-between">
               <i className="size-1 rounded-full bg-current opacity-50" />
@@ -504,6 +505,18 @@ export function Hero() {
           <span className="lg:hidden">{t.hero.hintTouch}</span>
         </p>
       </div>
+
+      {/* Accion principal del primer pantallazo: abajo a la derecha, en la misma linea base que el rol */}
+      <a
+        href="#work"
+        onClick={(e) => {
+          e.preventDefault();
+          scrollToId("work");
+        }}
+        className="hero-in btn absolute bottom-8 right-8 z-30 hidden lg:inline-flex"
+      >
+        {t.hero.cta}
+      </a>
     </section>
   );
 }

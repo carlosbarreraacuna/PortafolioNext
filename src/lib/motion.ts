@@ -1,6 +1,6 @@
 "use client";
 
-import { gsap, ScrollTrigger, SIN_MOVIMIENTO } from "@/lib/gsap";
+import { gsap, SIN_MOVIMIENTO } from "@/lib/gsap";
 
 const NAV_OFFSET = 64;
 
@@ -12,33 +12,34 @@ export function scrollToId(id: string) {
     window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - NAV_OFFSET });
     return;
   }
-  gsap.to(window, { scrollTo: { y: el, offsetY: NAV_OFFSET }, duration: 0.9, ease: "power3.inOut" });
+  gsap.to(window, { scrollTo: { y: el, offsetY: NAV_OFFSET }, duration: 1, ease: "power3.inOut" });
 }
 
 /**
- * Revela en cascada los elementos [data-reveal] de un contenedor al entrar al viewport.
- * Solo anima transform y opacity. Llamar dentro de gsap.matchMedia(CON_MOVIMIENTO).
+ * Entrada de una seccion, en orden de lectura: primero cada linea de los titulares [data-lines] sube
+ * desde su mascara (.line-mask > span), despues los elementos [data-reveal] en cascada (texto, luego imagen).
+ * Solo transform y opacity; llamar dentro de gsap.matchMedia(CON_MOVIMIENTO) para que sin movimiento
+ * el contenido se vea de entrada.
  */
-export function revealOnScroll(root: Element, selector = "[data-reveal]") {
-  const targets = gsap.utils.toArray<HTMLElement>(selector, root);
-  if (!targets.length) return;
-  gsap.set(targets, { autoAlpha: 0, y: 24 });
-  ScrollTrigger.batch(targets, {
-    start: "top 88%",
-    once: true,
-    onEnter: (batch) =>
-      gsap.to(batch, { autoAlpha: 1, y: 0, duration: 0.8, ease: "back.out(1.4)", stagger: 0.08, overwrite: true }),
+export function revealSection(root: Element) {
+  gsap.utils.toArray<HTMLElement>("[data-lines]", root).forEach((head) => {
+    gsap.from(head.querySelectorAll(".line-mask > span"), {
+      yPercent: 108,
+      duration: 0.9,
+      stagger: 0.11,
+      ease: "power4.out",
+      scrollTrigger: { trigger: head, start: "top 88%", once: true },
+    });
   });
 
-  // Barras de acento bajo los titulos: se dibujan de izquierda a derecha al entrar.
-  gsap.utils.toArray<HTMLElement>("[data-bar]", root).forEach((bar) => {
-    gsap.from(bar, {
-      scaleX: 0,
-      transformOrigin: "left center",
-      duration: 0.7,
-      delay: 0.15,
-      ease: "back.out(2)",
-      scrollTrigger: { trigger: bar, start: "top 90%", once: true },
+  // Un disparador por elemento: cada parte entra cuando llega a la pantalla, en orden de lectura.
+  gsap.utils.toArray<HTMLElement>("[data-reveal]", root).forEach((el) => {
+    gsap.from(el, {
+      autoAlpha: 0,
+      y: 28,
+      duration: 0.8,
+      ease: "power3.out",
+      scrollTrigger: { trigger: el, start: "top 92%", once: true },
     });
   });
 }

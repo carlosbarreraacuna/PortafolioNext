@@ -1,6 +1,5 @@
 ## Bienvenido al codigo fuente de mi portafolio 
 
-![alt text](image.png)
 
 ![alt text](image-1.png)
 

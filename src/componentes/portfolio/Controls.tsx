@@ -7,6 +7,7 @@ import type { Lang } from "@/content/translations";
 
 type Theme = "light" | "dark";
 
+// Controles planos: heredan el color de la barra (claro sobre el hero, tinta sobre la pagina).
 export function ThemeToggle() {
   const { t } = useI18n();
   const [theme, setTheme] = useState<Theme | null>(null);
@@ -30,9 +31,9 @@ export function ThemeToggle() {
       type="button"
       onClick={toggle}
       aria-label={theme === "dark" ? t.ui.toLight : t.ui.toDark}
-      className="toon-btn grid size-10 place-items-center bg-surface text-ink"
+      className="grid size-11 place-items-center transition-transform duration-200 hover:rotate-12 active:scale-90"
     >
-      {theme && <Icon size={20} weight="regular" aria-hidden="true" />}
+      {theme && <Icon size={20} weight="bold" aria-hidden="true" />}
     </button>
   );
 }
@@ -41,7 +42,7 @@ export function LangSwitch() {
   const { lang, setLang, t } = useI18n();
   const langs: Lang[] = ["es", "en"];
   return (
-    <div role="group" aria-label={t.ui.language} className="toon-control flex bg-surface p-0.5 text-sm font-bold">
+    <div role="group" aria-label={t.ui.language} className="flex text-small font-semibold">
       {langs.map((l) => (
         <button
           key={l}
@@ -49,8 +50,8 @@ export function LangSwitch() {
           onClick={() => setLang(l)}
           aria-pressed={lang === l}
           className={[
-            "h-8 min-w-10 rounded-[calc(var(--radius-control)-4px)] px-3 transition-colors duration-200 active:scale-[0.98]",
-            lang === l ? "bg-accent text-on-accent" : "text-muted hover:text-ink",
+            "h-11 min-w-9 px-1.5 transition-opacity duration-200 active:scale-95",
+            lang === l ? "opacity-100" : "opacity-60 hover:opacity-100",
           ].join(" ")}
         >
           {l.toUpperCase()}

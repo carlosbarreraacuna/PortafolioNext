@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Anton, Inter, Plus_Jakarta_Sans } from "next/font/google";
+import { Anton, Inter } from "next/font/google";
 import { I18nProvider } from "@/componentes/portfolio/I18nProvider";
 import "./globals.css";
 
@@ -9,14 +9,7 @@ const inter = Inter({
   display: "swap",
 });
 
-const jakarta = Plus_Jakarta_Sans({
-  subsets: ["latin"],
-  weight: ["500", "600", "700", "800"],
-  variable: "--font-jakarta",
-  display: "swap",
-});
-
-// Titular gigante del hero: condensada y pesada, como un cartel.
+// Titulares: condensada y pesada, como un cartel. Inter queda para todo lo que se lee.
 const anton = Anton({
   subsets: ["latin"],
   weight: "400",
@@ -30,7 +23,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Carlos Barrera Acuña | Full Stack Developer",
     description: "Plataformas web empresariales con Laravel, Next.js y PostgreSQL.",
-    images: ["/carlos-toon.png"],
+    images: [{ url: "/og.jpg", width: 1200, height: 630 }],
     locale: "es_CO",
     type: "website",
   },
@@ -38,8 +31,8 @@ export const metadata: Metadata = {
 
 export const viewport: Viewport = {
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#FFF4E2" },
-    { media: "(prefers-color-scheme: dark)", color: "#141A2B" },
+    { media: "(prefers-color-scheme: light)", color: "#0B1222" },
+    { media: "(prefers-color-scheme: dark)", color: "#0B1222" },
   ],
 };
 
@@ -48,7 +41,7 @@ const themeScript = `(function(){try{var t=localStorage.getItem("cb-theme");if(t
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="es" suppressHydrationWarning className={`${inter.variable} ${jakarta.variable} ${anton.variable}`}>
+    <html lang="es" suppressHydrationWarning className={`${inter.variable} ${anton.variable}`}>
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
       </head>

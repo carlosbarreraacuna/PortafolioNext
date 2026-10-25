@@ -4,9 +4,9 @@ import { Contact } from "@/componentes/portfolio/Contact";
 import { Footer } from "@/componentes/portfolio/Footer";
 import { Hero } from "@/componentes/portfolio/Hero";
 import { Navbar } from "@/componentes/portfolio/Navbar";
+import { PictureBand } from "@/componentes/portfolio/PictureBand";
 import { Services } from "@/componentes/portfolio/Services";
 import { Stack } from "@/componentes/portfolio/Stack";
-import { StoryBand } from "@/componentes/portfolio/StoryBand";
 import { Work } from "@/componentes/portfolio/Work";
 
 export default function Home() {
@@ -18,14 +18,12 @@ export default function Home() {
       <Navbar />
       <main>
         <Hero />
-        <StoryBand index={0} />
         <About />
-        <StoryBand index={1} />
+        <PictureBand scene="arch" />
         <Services />
-        <StoryBand index={2} />
-        <Career />
-        <StoryBand index={3} />
         <Work />
+        <PictureBand scene="desk" />
+        <Career />
         <Stack />
         <Contact />
       </main>

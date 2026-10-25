@@ -2,10 +2,15 @@
 
 import { useRef } from "react";
 import { CON_MOVIMIENTO, gsap, useGSAP } from "@/lib/gsap";
-import { revealOnScroll } from "@/lib/motion";
+import { revealSection } from "@/lib/motion";
 import { useI18n } from "./I18nProvider";
-import { Section, SectionTitle } from "./Section";
+import { Head } from "./Section";
 
+/**
+ * Trayectoria como un programa a un solo tamano: cargo, empresa y periodo en columnas fijas, sin lineas;
+ * los logros de cada puesto debajo, a tamano de lectura. La formacion es el segundo bloque, con su
+ * encabezado en el color de acento.
+ */
 export function Career() {
   const { t } = useI18n();
   const root = useRef<HTMLElement>(null);
@@ -13,54 +18,49 @@ export function Career() {
   useGSAP(
     () => {
       const mm = gsap.matchMedia();
-      mm.add(CON_MOVIMIENTO, () => {
-        revealOnScroll(root.current!);
-        // La linea se dibuja con el scroll: muestra el avance en el tiempo, de lo mas reciente a lo mas antiguo.
-        gsap.fromTo(
-          ".career-progress",
-          { scaleY: 0 },
-          {
-            scaleY: 1,
-            ease: "none",
-            transformOrigin: "top",
-            scrollTrigger: { trigger: ".career-list", start: "top 70%", end: "bottom 70%", scrub: true },
-          },
-        );
-      });
+      mm.add(CON_MOVIMIENTO, () => revealSection(root.current!));
       return () => mm.revert();
     },
     { scope: root },
   );
 
-  return (
-    <Section id="career" ref={root}>
-      <div className="grid gap-12 lg:grid-cols-12">
-        <div className="lg:col-span-4">
-          <div className="lg:sticky lg:top-28">
-            <SectionTitle>{t.sections.career}</SectionTitle>
-          </div>
-        </div>
+  const row = "grid gap-1 text-lead lg:grid-cols-[3fr_2fr_1fr] lg:gap-6";
 
-        <ol className="career-list relative flex flex-col gap-16 pl-8 lg:col-span-8 lg:pl-12">
-          <span aria-hidden="true" className="absolute -left-[1.5px] bottom-0 top-2 w-[3px] rounded-full bg-line" />
-          <span aria-hidden="true" className="career-progress absolute -left-[1.5px] bottom-0 top-2 w-[3px] origin-top rounded-full bg-accent" />
-          {t.career.map((c) => (
-            <li key={c.role + c.period} data-reveal className="relative flex flex-col gap-3">
-              <span aria-hidden="true" className="absolute -left-8 top-0.5 size-5 -translate-x-1/2 rounded-full border-2 border-outline bg-accent lg:-left-12" />
-              <p className="toon-control w-fit bg-accent-soft px-3 py-1 text-sm font-bold tabular-nums text-ink">{c.period}</p>
-              <h3 className="text-2xl font-extrabold leading-tight tracking-tight text-ink">{c.role}</h3>
-              <p className="text-base text-muted">{c.org}</p>
-              <ul className="mt-3 flex max-w-[65ch] flex-col gap-3">
-                {c.bullets.map((b) => (
-                  <li key={b} className="text-base leading-relaxed text-ink">
-                    {b}
-                  </li>
-                ))}
-              </ul>
-            </li>
-          ))}
-        </ol>
-      </div>
-    </Section>
+  return (
+    <section id="career" ref={root} className="scroll-mt-16 px-5 pb-20 pt-24 md:px-8 md:pb-32 md:pt-40">
+      <Head lines={t.career.head} className="text-heading text-ink" />
+
+      <ul className="mt-14 flex flex-col gap-14 md:mt-20">
+        {t.career.jobs.map((j) => (
+          <li key={j.role + j.period} data-reveal className="flex flex-col gap-5">
+            <div className={row}>
+              <h3 className="font-semibold text-ink">{j.role}</h3>
+              <p className="text-ink">{j.org}</p>
+              <p className="tabular-nums text-muted lg:text-right">{j.period}</p>
+            </div>
+            <ul className="grid gap-3 text-body text-ink md:grid-cols-3 md:gap-8">
+              {j.bullets.map((b) => (
+                <li key={b} className="max-w-[46ch]">
+                  {b}
+                </li>
+              ))}
+            </ul>
+          </li>
+        ))}
+      </ul>
+
+      <h3 data-reveal className="mt-20 text-lead font-semibold text-accent-text md:mt-28">
+        {t.career.eduHead}
+      </h3>
+      <ul className="mt-5 flex flex-col gap-3">
+        {t.career.edu.map((e) => (
+          <li key={e.b} data-reveal className={row}>
+            <span className="text-ink">{e.b}</span>
+            <span className="text-muted">{e.s}</span>
+            <span className="tabular-nums text-muted lg:text-right">{e.y}</span>
+          </li>
+        ))}
+      </ul>
+    </section>
   );
 }

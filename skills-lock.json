@@ -5,13 +5,19 @@
       "source": "Leonxlnx/taste-skill",
       "sourceType": "github",
       "skillPath": "skills/taste-skill/SKILL.md",
-      "computedHash": "899b84384f74f540ea5284d9b2e9234e050998b42eacc805410b518d4226c0b3"
+      "computedHash": "53590ee9325bee34d7888bf0d81bd3941a108b1e7850df46802d93104e3f2b90"
     },
     "gsap": {
       "source": "heygen-com/hyperframes",
       "sourceType": "github",
       "skillPath": "skills/gsap/SKILL.md",
       "computedHash": "22e6fd7e1c1038eebc8304c985fab31839cc19ec291d3d19c022f899fbd36e46"
+    },
+    "playwright-skill": {
+      "source": "lackeyjb/playwright-skill",
+      "sourceType": "github",
+      "skillPath": "skills/playwright-skill/SKILL.md",
+      "computedHash": "cee6138f1a7ae2b52e9a600edaf456cc0c8c701ca267a00f0f116d6f99764d13"
     },
     "redesign-existing-projects": {
       "source": "Leonxlnx/taste-skill",

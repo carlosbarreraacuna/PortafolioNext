@@ -8,47 +8,61 @@ import { useI18n } from "./I18nProvider";
 import { LangSwitch, ThemeToggle } from "./Controls";
 import { CONTACT } from "@/content/translations";
 
-const SECTION_IDS = ["about", "skills", "career", "work", "stack", "contact"] as const;
-type SectionId = (typeof SECTION_IDS)[number];
+// En el orden en que aparecen en la pagina. Contacto va aparte como la accion de la barra.
+const SECTION_IDS = ["about", "skills", "work", "career", "stack"] as const;
+type SectionId = (typeof SECTION_IDS)[number] | "contact";
 
 export function Navbar() {
   const { t } = useI18n();
   const [active, setActive] = useState<SectionId | null>(null);
-  const [scrolled, setScrolled] = useState(false);
+  const [onHero, setOnHero] = useState(true);
   const [open, setOpen] = useState(false);
+  const headerRef = useRef<HTMLElement>(null);
   const drawerRef = useRef<HTMLDivElement>(null);
   const closeRef = useRef<HTMLButtonElement>(null);
   const menuBtnRef = useRef<HTMLButtonElement>(null);
 
-  // Seccion activa y fondo de la barra: se resuelven con ScrollTrigger, sin listeners de scroll.
+  // Seccion activa, tono de la barra y ocultar al bajar: todo con ScrollTrigger, sin listeners de scroll.
   useGSAP(() => {
-    const triggers = SECTION_IDS.map((id) =>
+    const ids: SectionId[] = [...SECTION_IDS, "contact"];
+    const triggers = ids.map((id) =>
       ScrollTrigger.create({
         trigger: `#${id}`,
         start: "top 45%",
         end: "bottom 45%",
-        onToggle: (self) => {
-          if (self.isActive) setActive(id);
-        },
+        onToggle: (self) => self.isActive && setActive(id),
       }),
     );
-    const top = ScrollTrigger.create({
-      start: 8,
-      end: "max",
-      onToggle: (self) => setScrolled(self.isActive),
-    });
     const hero = ScrollTrigger.create({
       trigger: "#top",
       start: "top top",
-      end: "bottom 45%",
+      end: "bottom 64px",
       onToggle: (self) => {
+        setOnHero(self.isActive);
         if (self.isActive) setActive(null);
       },
     });
+
+    // Fuera del hero, la barra se esconde al bajar y vuelve al subir: deja leer sin perder la navegacion.
+    const mm = gsap.matchMedia();
+    mm.add(CON_MOVIMIENTO, () => {
+      const hide = gsap.to(headerRef.current, { yPercent: -100, duration: 0.35, ease: "power2.out", paused: true });
+      const st = ScrollTrigger.create({
+        start: "top top",
+        end: "max",
+        onUpdate: (self) => {
+          const pastHero = self.scroll() > window.innerHeight * 0.9;
+          if (self.direction === 1 && pastHero) hide.play();
+          else hide.reverse();
+        },
+      });
+      return () => st.kill();
+    });
+
     return () => {
       triggers.forEach((s) => s.kill());
-      top.kill();
       hero.kill();
+      mm.revert();
     };
   }, []);
 
@@ -69,14 +83,14 @@ export function Navbar() {
     };
   }, [open]);
 
-  // Entrada del menu movil: el panel y sus enlaces aparecen en secuencia.
+  // Entrada del menu movil: el panel baja y los enlaces suben desde su mascara, uno tras otro.
   useGSAP(
     () => {
       if (!open || !drawerRef.current) return;
       const mm = gsap.matchMedia();
       mm.add(CON_MOVIMIENTO, () => {
-        gsap.from(drawerRef.current, { autoAlpha: 0, duration: 0.25, ease: "power2.out" });
-        gsap.from("[data-drawer-link]", { x: 32, autoAlpha: 0, duration: 0.45, stagger: 0.06, ease: "power3.out", delay: 0.05 });
+        gsap.from(drawerRef.current, { yPercent: -100, duration: 0.5, ease: "power4.out" });
+        gsap.from("[data-drawer-link] > a > span", { yPercent: 110, duration: 0.7, stagger: 0.06, ease: "power4.out", delay: 0.15 });
       });
       return () => mm.revert();
     },
@@ -90,85 +104,46 @@ export function Navbar() {
   };
 
   const links = SECTION_IDS.map((id) => ({ id, label: t.nav[id] }));
+  const tone = onHero ? "bg-transparent text-white" : "bg-canvas text-ink";
 
   return (
     <>
-      <header
-        className={[
-          "fixed inset-x-0 top-0 z-nav border-b-2 transition-colors duration-300",
-          scrolled ? "border-outline bg-canvas/90 backdrop-blur-md" : "border-transparent bg-transparent",
-        ].join(" ")}
-      >
-        <nav aria-label="Principal" className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-6 px-5 md:px-8">
-          <a
-            href="#top"
-            onClick={go("top")}
-            aria-hidden={!scrolled}
-            tabIndex={scrolled ? 0 : -1}
-            className={[
-              "font-display text-lg font-extrabold tracking-tight transition-opacity duration-300",
-              scrolled ? "opacity-100" : "pointer-events-none opacity-0",
-            ].join(" ")}
-          >
+      <header ref={headerRef} className={`fixed inset-x-0 top-0 z-nav transition-colors duration-300 ${tone}`}>
+        <nav aria-label="Principal" className="flex h-16 items-center justify-between gap-6 px-5 md:px-8">
+          <a href="#top" onClick={go("top")} className="whitespace-nowrap font-display text-xl uppercase leading-none md:text-2xl">
             Carlos Barrera
           </a>
 
-          <ul
-            aria-hidden={!scrolled}
-            className={[
-              "hidden items-center gap-1 transition-opacity duration-300 lg:flex",
-              scrolled ? "opacity-100" : "pointer-events-none opacity-0",
-            ].join(" ")}
-          >
+          <ul className="hidden items-center gap-7 lg:flex">
             {links.map(({ id, label }) => (
               <li key={id}>
                 <a
                   href={`#${id}`}
                   onClick={go(id)}
-                  tabIndex={scrolled ? 0 : -1}
                   aria-current={active === id ? "true" : undefined}
-                  className={[
-                    "relative block rounded-control px-3 py-2 text-sm font-semibold transition-colors duration-200",
-                    active === id ? "text-ink" : "text-muted hover:text-ink",
-                  ].join(" ")}
+                  className={`link-draw py-1 text-small font-semibold ${active === id ? (onHero ? "text-accent" : "text-accent-text") : ""}`}
                 >
                   {label}
-                  <span
-                    aria-hidden="true"
-                    className={[
-                      "absolute inset-x-3 bottom-0 h-1 origin-left rounded-full bg-accent transition-transform duration-300",
-                      active === id ? "scale-x-100" : "scale-x-0",
-                    ].join(" ")}
-                  />
                 </a>
               </li>
             ))}
           </ul>
 
-          <div className="flex items-center gap-2">
-            <a
-              href="#contact"
-              onClick={go("contact")}
-              tabIndex={scrolled ? -1 : 0}
-              aria-hidden={scrolled}
-              className={[
-                "hidden rounded-control px-3 py-2 text-sm font-semibold text-white/85 transition duration-300 hover:text-white lg:block",
-                scrolled ? "pointer-events-none opacity-0" : "opacity-100",
-              ].join(" ")}
-            >
-              {t.nav.contact}
-            </a>
+          <div className="flex items-center gap-1 md:gap-2">
             <LangSwitch />
             <ThemeToggle />
+            <a href="#contact" onClick={go("contact")} className="btn ml-2 hidden min-h-11 px-5 text-small sm:inline-flex">
+              {t.nav.cta}
+            </a>
             <button
               ref={menuBtnRef}
               type="button"
               onClick={() => setOpen(true)}
               aria-label={t.ui.menu}
               aria-expanded={open}
-              className="toon-btn grid size-10 place-items-center bg-surface text-ink lg:hidden"
+              className="grid size-11 place-items-center active:scale-90 lg:hidden"
             >
-              <List size={20} aria-hidden="true" />
+              <List size={24} aria-hidden="true" />
             </button>
           </div>
         </nav>
@@ -180,32 +155,33 @@ export function Navbar() {
           role="dialog"
           aria-modal="true"
           aria-label={t.ui.menu}
-          className="fixed inset-0 z-drawer flex flex-col bg-canvas px-5 py-4 md:px-8"
+          className="fixed inset-0 z-drawer flex flex-col bg-field px-5 pb-8 text-field-ink md:px-8"
         >
-          <div className="flex h-12 items-center justify-between">
-            <span className="font-display text-base font-bold tracking-tight">Carlos Barrera</span>
+          <div className="flex h-16 items-center justify-between">
+            <span className="font-display text-2xl uppercase leading-none">Carlos Barrera</span>
             <button
               ref={closeRef}
               type="button"
               onClick={() => setOpen(false)}
               aria-label={t.ui.close}
-              className="toon-btn grid size-10 place-items-center bg-surface text-ink"
+              className="grid size-11 place-items-center active:scale-90"
             >
-              <X size={20} aria-hidden="true" />
+              <X size={24} aria-hidden="true" />
             </button>
           </div>
-          <ul className="mt-10 flex flex-1 flex-col gap-1">
-            {links.map(({ id, label }) => (
-              <li key={id} data-drawer-link>
-                <a href={`#${id}`} onClick={go(id)} className="block rounded-control py-3 font-display text-4xl font-bold tracking-tight text-ink">
-                  {label}
+          <ul className="mt-8 flex flex-1 flex-col gap-2">
+            {[...links, { id: "contact", label: t.nav.contact }].map(({ id, label }) => (
+              <li key={id} data-drawer-link className="overflow-clip">
+                <a href={`#${id}`} onClick={go(id)} className="block py-1 font-display text-[13vw] uppercase leading-[0.95] sm:text-7xl">
+                  <span className={`block ${active === id ? "text-accent" : ""}`}>{label}</span>
                 </a>
               </li>
             ))}
           </ul>
-          <a href={CONTACT.phoneHref} className="py-4 text-lg font-bold text-accent-text">
-            {CONTACT.phone}
-          </a>
+          <div className="flex flex-col gap-1 text-body">
+            <a href={`mailto:${CONTACT.email}`} className="font-semibold">{CONTACT.email}</a>
+            <a href={CONTACT.phoneHref} className="text-field-muted">{CONTACT.phone}</a>
+          </div>
         </div>
       )}
     </>
