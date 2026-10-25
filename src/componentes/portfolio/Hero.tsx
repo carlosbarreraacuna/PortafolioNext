@@ -1,205 +1,383 @@
 "use client";
 
-import { useRef } from "react";
-import Image from "next/image";
-import { ArrowDownRight, BracketsCurly, Database, GitBranch } from "@phosphor-icons/react";
-import { CON_MOVIMIENTO, gsap, SplitText, useGSAP } from "@/lib/gsap";
-import { scrollToId } from "@/lib/motion";
+import { useEffect, useRef } from "react";
+import { Cursor, HandTap } from "@phosphor-icons/react";
+import { CON_MOVIMIENTO, gsap, useGSAP } from "@/lib/gsap";
 import { useI18n } from "./I18nProvider";
 
-const CON_PUNTERO = `${CON_MOVIMIENTO} and (hover: hover) and (pointer: fine)`;
+// Frames renderizados con Remotion desde /animation (npm run render). Si cambian los clips alla,
+// estas cantidades deben coincidir con CLIPS de animation/src/pose.ts.
+const FPS = 20;
+const CLIPS = { idle: 40, lookLeft: 13, lookRight: 13, greet: 89, greetOut: 36 } as const;
+const FRAME = { w: 760, h: 923 };
+type ClipName = keyof typeof CLIPS;
+type Zone = "left" | "center" | "right";
+type MsgKey = "left" | "right" | "hey" | "hi" | "check";
 
-// Pegatinas del fondo: iconos del stack real que flotan fuera de la foto (no se superponen a la imagen).
-const STICKERS = [
-  { Icon: BracketsCurly, pos: "right-[7%] top-[22%]", tone: "bg-accent text-on-accent", size: "size-16", depth: 1.4 },
-  { Icon: Database, pos: "right-[22%] bottom-[14%]", tone: "bg-surface text-ink", size: "size-14", depth: 0.9 },
-  { Icon: GitBranch, pos: "right-[4%] bottom-[30%]", tone: "toon-tint text-ink", size: "size-12", depth: 1.8 },
+const frameSrc = (c: ClipName, i: number) => `/hero/${c}/${String(i).padStart(3, "0")}.webp`;
+
+// Las zonas solo existen con raton y pantalla ancha; en tactil el saludo se lanza solo o con un toque.
+const CON_ZONAS = "(hover: hover) and (pointer: fine) and (min-width: 1024px)";
+// Frame del saludo en que aparece cada frase: mirada, mano arriba, senala hacia abajo.
+const GREET_CUES: [number, MsgKey][] = [
+  [0, "hey"],
+  [42, "hi"],
+  [74, "check"],
 ];
+const HOLD_LOOK = 2600;
+const HOLD_GREET = 2400;
+const HOLD_MIN = 700; // aunque el cursor cambie de zona, la reaccion se sostiene al menos esto
+const BLEND = 0.16; // segundos de fundido al cambiar de clip
 
 export function Hero() {
-  const { t, lang } = useI18n();
+  const { t } = useI18n();
   const root = useRef<HTMLElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const posterRef = useRef<HTMLImageElement>(null);
+  const bubbleRef = useRef<HTMLDivElement>(null);
+  const bubbleText = useRef<HTMLSpanElement>(null);
+  const messages = useRef(t.hero.messages);
+  const currentMsg = useRef<MsgKey | null>(null);
 
-  // Texto: primero el titular por lineas (jerarquia), despues el resto en orden de lectura.
-  // Se repite al cambiar de idioma porque el titular se vuelve a montar.
+  // El motor vive fuera de React: el idioma solo cambia el texto del globo que ya se ve.
+  useEffect(() => {
+    messages.current = t.hero.messages;
+    if (currentMsg.current && bubbleText.current) bubbleText.current.textContent = t.hero.messages[currentMsg.current];
+  }, [t]);
+
   useGSAP(
     () => {
       const mm = gsap.matchMedia();
       mm.add(CON_MOVIMIENTO, () => {
-        SplitText.create(".hero-title", {
-          type: "lines",
-          mask: "lines",
-          maskClass: "hero-line-mask",
-          autoSplit: true,
-          onSplit: (self) => gsap.from(self.lines, { yPercent: 115, duration: 0.9, stagger: 0.1, ease: "back.out(1.3)" }),
-        });
-        gsap.from(".hero-fade", { autoAlpha: 0, y: 18, duration: 0.7, stagger: 0.1, delay: 0.35, ease: "back.out(1.6)" });
+        gsap.from(".hero-in", { autoAlpha: 0, y: 18, duration: 0.8, stagger: 0.12, delay: 0.15, ease: "power3.out" });
+        gsap.from(".hero-figure", { autoAlpha: 0, y: 40, scale: 0.97, transformOrigin: "50% 100%", duration: 1.1, ease: "power3.out" });
       });
-      return () => mm.revert();
-    },
-    { dependencies: [lang], scope: root, revertOnUpdate: true },
-  );
-
-  // Personaje: la cortina de color se abre y revela la ilustracion, que rebota al asentarse y luego
-  // respira. Al bajar sube con parallax. Las pegatinas aparecen con rebote y flotan. Todo es transform.
-  useGSAP(
-    () => {
-      const el = root.current;
-      if (!el) return;
-      const mm = gsap.matchMedia();
-
-      mm.add(CON_MOVIMIENTO, () => {
-        gsap
-          .timeline()
-          .fromTo(".hero-photo-curtain", { scaleY: 1 }, { scaleY: 0, transformOrigin: "top", duration: 1.1, ease: "power4.inOut" })
-          .from(".hero-photo-img", { scale: 1.25, duration: 1.6, ease: "elastic.out(1, 0.7)" }, 0.15)
-          .from(".hero-arch-back", { rotate: 0, duration: 1.1, ease: "back.out(2.2)" }, 0.5)
-          .from(".hero-arch-mid", { rotate: 0, duration: 1.1, ease: "back.out(2.2)" }, 0.65)
-          .from(".hero-sticker", { scale: 0, rotate: -40, duration: 0.8, stagger: 0.14, ease: "back.out(3)" }, 0.9);
-
-        // Vida en reposo: el personaje respira y las pegatinas flotan a ritmos distintos.
-        gsap.to(".hero-photo-shift", { scale: 1.018, transformOrigin: "50% 100%", duration: 2.8, ease: "sine.inOut", yoyo: true, repeat: -1, delay: 1.8 });
-        gsap.utils.toArray<HTMLElement>(".hero-sticker-float").forEach((s, i) => {
-          gsap.to(s, {
-            y: i % 2 ? 12 : -14,
-            rotate: i % 2 ? -7 : 7,
-            duration: 2.2 + i * 0.5,
-            ease: "sine.inOut",
-            yoyo: true,
-            repeat: -1,
-            delay: 1.2 + i * 0.3,
-          });
-        });
-
-        // Al bajar, el personaje sube un poco mas rapido que el marco: profundidad entre foto y texto.
-        gsap.to(".hero-photo-img", {
-          yPercent: -5,
-          ease: "none",
-          scrollTrigger: { trigger: el, start: "top top", end: "bottom top", scrub: true },
-        });
-      });
-
-      mm.add(CON_PUNTERO, () => {
-        const shift = el.querySelector<HTMLElement>(".hero-photo-shift");
-        if (!shift) return;
-        const xTo = gsap.quickTo(shift, "x", { duration: 0.9, ease: "power3.out" });
-        const yTo = gsap.quickTo(shift, "y", { duration: 0.9, ease: "power3.out" });
-        const stickers = gsap.utils.toArray<HTMLElement>(".hero-sticker-drift").map((s) => ({
-          depth: Number(s.dataset.depth ?? 1),
-          x: gsap.quickTo(s, "x", { duration: 1.1, ease: "power3.out" }),
-          y: gsap.quickTo(s, "y", { duration: 1.1, ease: "power3.out" }),
-        }));
-        const onMove = (e: PointerEvent) => {
-          const r = el.getBoundingClientRect();
-          const nx = (e.clientX - r.left) / r.width - 0.5;
-          const ny = (e.clientY - r.top) / r.height - 0.5;
-          xTo(-nx * 28);
-          yTo(-ny * 20);
-          stickers.forEach((s) => {
-            s.x(nx * 36 * s.depth);
-            s.y(ny * 26 * s.depth);
-          });
-        };
-        const onLeave = () => {
-          xTo(0);
-          yTo(0);
-          stickers.forEach((s) => {
-            s.x(0);
-            s.y(0);
-          });
-        };
-        el.addEventListener("pointermove", onMove);
-        el.addEventListener("pointerleave", onLeave);
-        return () => {
-          el.removeEventListener("pointermove", onMove);
-          el.removeEventListener("pointerleave", onLeave);
-        };
-      });
-
       return () => mm.revert();
     },
     { scope: root },
   );
 
+  useEffect(() => {
+    const section = root.current;
+    const canvas = canvasRef.current;
+    const bubble = bubbleRef.current;
+    const ctx = canvas?.getContext("2d");
+    if (!section || !canvas || !bubble || !ctx) return;
+
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const zonesMq = window.matchMedia(CON_ZONAS);
+    const frames = {} as Record<ClipName, HTMLImageElement[]>;
+    const ready = {} as Record<ClipName, boolean>;
+    let disposed = false;
+
+    const load = (c: ClipName) => {
+      frames[c] = Array.from({ length: CLIPS[c] }, (_, i) => {
+        const img = new Image();
+        img.src = frameSrc(c, i);
+        return img;
+      });
+      return Promise.all(frames[c].map((img) => img.decode().catch(() => {}))).then(() => {
+        ready[c] = true;
+      });
+    };
+
+    // ── Globo de mensajes ──
+    const say = (key: MsgKey | null) => {
+      if (key === currentMsg.current) return;
+      currentMsg.current = key;
+      gsap.killTweensOf(bubble);
+      const visible = gsap.getProperty(bubble, "autoAlpha") as number;
+      if (!key) {
+        gsap.to(bubble, { autoAlpha: 0, y: 6, duration: 0.25, ease: "power2.in" });
+        return;
+      }
+      gsap.to(bubble, {
+        autoAlpha: 0,
+        y: 6,
+        duration: visible > 0.05 ? 0.16 : 0,
+        ease: "power2.in",
+        onComplete: () => {
+          bubble.dataset.side = key === "left" || key === "right" ? key : "center";
+          if (bubbleText.current) bubbleText.current.textContent = messages.current[key];
+          gsap.fromTo(
+            bubble,
+            { autoAlpha: 0, y: 10, scale: 0.94 },
+            { autoAlpha: 1, y: 0, scale: 1, duration: reduce ? 0 : 0.5, ease: "back.out(1.8)" },
+          );
+        },
+      });
+    };
+
+    // ── Reproductor: clip actual, posicion en frames (decimal) y sentido ──
+    let clip: ClipName = "idle";
+    let pos = 0;
+    let dir: 1 | -1 = 1;
+    let playing = true;
+    let onEnd: (() => void) | null = null;
+    let fadeFrom: { clip: ClipName; pos: number } | null = null;
+    let fade = 0;
+    let cue = 0;
+
+    const index = (c: ClipName, i: number) => (c === "idle" ? ((i % CLIPS.idle) + CLIPS.idle) % CLIPS.idle : Math.max(0, Math.min(CLIPS[c] - 1, i)));
+
+    // Interpola entre el frame actual y el siguiente con un fundido: a 20 fps se ve continuo a 60 Hz.
+    const drawClip = (c: ClipName, p: number, alpha: number) => {
+      const list = frames[c];
+      const i = Math.floor(p);
+      const f = p - i;
+      const a = list[index(c, i)];
+      const b = list[index(c, i + 1)];
+      ctx.globalAlpha = alpha;
+      ctx.drawImage(a, 0, 0);
+      if (f > 0.02 && b !== a) {
+        ctx.globalAlpha = alpha * f;
+        ctx.drawImage(b, 0, 0);
+      }
+    };
+
+    const play = (c: ClipName, d: 1 | -1, then: (() => void) | null) => {
+      if (c !== clip && !reduce) {
+        fadeFrom = { clip, pos };
+        fade = 1;
+      }
+      clip = c;
+      dir = d;
+      pos = d > 0 ? 0 : CLIPS[c] - 1;
+      playing = !(reduce && c === "idle");
+      onEnd = then;
+      cue = 0;
+    };
+
+    // ── Pausas sostenidas, que se acortan si el visitante ya cambio de zona ──
+    let holdTimer = 0;
+    let holdStart = 0;
+    let holdThen: (() => void) | null = null;
+    const runHold = () => {
+      holdTimer = 0;
+      const then = holdThen;
+      holdThen = null;
+      then?.();
+    };
+    const hold = (ms: number, then: () => void) => {
+      playing = false;
+      holdThen = then;
+      holdStart = performance.now();
+      holdTimer = window.setTimeout(runHold, pending ? HOLD_MIN : ms);
+    };
+    const cutHold = () => {
+      if (!holdTimer) return;
+      window.clearTimeout(holdTimer);
+      holdTimer = window.setTimeout(runHold, Math.max(0, HOLD_MIN - (performance.now() - holdStart)));
+    };
+
+    // ── Reacciones por zona ──
+    let busy = false;
+    let zone: Zone | null = null;
+    let pending: Zone | null = null;
+
+    const done = () => {
+      busy = false;
+      play("idle", 1, null);
+      if (pending) {
+        const next = pending;
+        pending = null;
+        react(next);
+      }
+    };
+
+    const react = (z: Zone) => {
+      const needs: ClipName[] = z === "center" ? ["greet", "greetOut"] : [z === "left" ? "lookLeft" : "lookRight"];
+      if (!needs.every((c) => ready[c])) {
+        pending = z;
+        return;
+      }
+      busy = true;
+      pending = null;
+      if (z === "center") {
+        play("greet", 1, () =>
+          hold(HOLD_GREET, () => {
+            say(null);
+            play("greetOut", 1, done);
+          }),
+        );
+        return;
+      }
+      const look: ClipName = z === "left" ? "lookLeft" : "lookRight";
+      say(z);
+      play(look, 1, () =>
+        hold(HOLD_LOOK, () => {
+          say(null);
+          play(look, -1, done);
+        }),
+      );
+    };
+
+    const setZone = (z: Zone | null) => {
+      if (z === zone) return;
+      zone = z;
+      if (!z) {
+        pending = null;
+        return;
+      }
+      if (busy) {
+        pending = z;
+        cutHold();
+      } else react(z);
+    };
+
+    // ── Bucle de dibujo ──
+    let raf = 0;
+    let last = 0;
+    const speed = reduce ? 1000 : 1; // con movimiento reducido cada clip salta a su pose final
+
+    const tick = (now: number) => {
+      const dt = last ? Math.min(0.05, (now - last) / 1000) : 0;
+      last = now;
+      if (playing) {
+        pos += dt * FPS * dir * speed;
+        const n = CLIPS[clip];
+        if (clip === "idle" && !onEnd) pos = ((pos % n) + n) % n;
+        else if ((dir > 0 && pos >= n - 1) || (dir < 0 && pos <= 0)) {
+          pos = dir > 0 ? n - 1 : 0;
+          playing = false;
+          const then = onEnd;
+          onEnd = null;
+          then?.();
+        }
+      }
+      if (clip === "greet") {
+        while (cue < GREET_CUES.length && pos >= GREET_CUES[cue][0]) say(GREET_CUES[cue++][1]);
+      }
+      fade = Math.max(0, fade - dt / BLEND);
+
+      ctx.globalAlpha = 1;
+      ctx.clearRect(0, 0, FRAME.w, FRAME.h);
+      drawClip(clip, pos, 1);
+      if (fade > 0 && fadeFrom) drawClip(fadeFrom.clip, fadeFrom.pos, fade);
+      raf = requestAnimationFrame(tick);
+    };
+
+    const start = () => {
+      if (raf || disposed || !ready.idle) return;
+      last = 0;
+      raf = requestAnimationFrame(tick);
+    };
+    const stop = () => {
+      cancelAnimationFrame(raf);
+      raf = 0;
+    };
+
+    // Solo se anima mientras el hero esta en pantalla.
+    let onScreen = true;
+    const io = new IntersectionObserver(([entry]) => {
+      onScreen = entry.isIntersecting;
+      if (onScreen) start();
+      else stop();
+    });
+    io.observe(section);
+
+    // ── Entrada del visitante ──
+    const onMove = (e: PointerEvent) => {
+      if (!zonesMq.matches || e.pointerType !== "mouse") return;
+      const r = section.getBoundingClientRect();
+      const x = (e.clientX - r.left) / r.width;
+      setZone(x < 0.36 ? "left" : x > 0.64 ? "right" : "center");
+    };
+    const onLeave = () => setZone(null);
+    const onTap = () => {
+      if (!busy) react("center");
+    };
+    section.addEventListener("pointermove", onMove);
+    section.addEventListener("pointerleave", onLeave);
+    canvas.addEventListener("click", onTap);
+
+    // Carga por prioridad: primero el trabajo en la laptop, luego las reacciones y el saludo.
+    let autoGreet = 0;
+    load("idle")
+      .then(() => {
+        if (disposed) return;
+        canvas.dataset.ready = "true";
+        if (posterRef.current) posterRef.current.style.visibility = "hidden";
+        if (onScreen) start();
+        return Promise.all([load("lookLeft"), load("lookRight"), load("greet"), load("greetOut")]);
+      })
+      .then(() => {
+        if (disposed) return;
+        if (pending && !busy) react(pending);
+        // Sin raton no hay zonas: en movil saluda solo una vez al cargar.
+        else if (!zonesMq.matches && !busy) autoGreet = window.setTimeout(() => !busy && react("center"), 600);
+      });
+
+    return () => {
+      disposed = true;
+      stop();
+      io.disconnect();
+      window.clearTimeout(holdTimer);
+      window.clearTimeout(autoGreet);
+      gsap.killTweensOf(bubble);
+      section.removeEventListener("pointermove", onMove);
+      section.removeEventListener("pointerleave", onLeave);
+      canvas.removeEventListener("click", onTap);
+    };
+  }, []);
+
   return (
-    <section id="top" ref={root} className="relative overflow-hidden px-5 pt-20 md:px-8 md:pt-16">
-      <div aria-hidden="true" className="toon-dots absolute inset-0" />
+    <section id="top" ref={root} className="hero-stage relative isolate flex flex-col overflow-hidden pt-16 lg:min-h-[100svh]">
+      <div aria-hidden="true" className="hero-glow pointer-events-none absolute left-1/2 top-[58%] -z-10 size-[min(115vw,64rem)] -translate-x-1/2 -translate-y-1/2" />
 
-      {STICKERS.map(({ Icon, pos, tone, size, depth }, i) => (
-        <div key={i} aria-hidden="true" className={`absolute z-10 hidden md:block ${pos}`}>
-          <div className="hero-sticker-drift" data-depth={depth}>
-            <div className="hero-sticker-float">
-              <div className={`hero-sticker toon-panel grid place-items-center ${size} ${tone}`}>
-                <Icon size={28} weight="bold" />
-              </div>
-            </div>
-          </div>
-        </div>
-      ))}
-
-      <div className="relative mx-auto grid w-full max-w-7xl md:min-h-[calc(100dvh-4rem)] md:grid-cols-12 md:gap-10">
-        {/* Texto: en movil va primero, en escritorio a la derecha */}
-        <div className="order-1 flex flex-col justify-center pb-12 pt-6 md:order-2 md:col-span-7 md:col-start-6 md:pb-24 md:pt-0">
-          <p className="hero-fade mb-5 text-base font-bold text-accent-text">{t.hero.eyebrow}</p>
-          <h1
-            key={lang}
-            className="hero-title pb-1 text-4xl font-extrabold leading-[1.12] tracking-tight text-ink md:text-4xl lg:text-[2.75rem] xl:text-[3.25rem]"
-          >
-            {t.hero.title}
+      <div className="relative mx-auto flex w-full max-w-7xl flex-1 flex-col px-4 md:px-8">
+        {/* Nota: arriba y centrada en movil y tablet, a la izquierda en escritorio */}
+        <div className="relative z-10 pt-6 text-center lg:absolute lg:left-8 lg:top-1/2 lg:max-w-[17rem] lg:-translate-y-1/2 lg:pt-0 lg:text-left xl:max-w-[19rem]">
+          <h1 className="hero-in text-[color:var(--hero-ink)]">
+            <span className="block font-serif text-[2.4rem] leading-none tracking-tight md:text-5xl xl:text-[3.4rem]">
+              {t.hero.greeting} <em className="italic">{t.hero.name}</em>
+            </span>
+            <span className="mt-3 block text-[0.7rem] font-semibold uppercase tracking-[0.32em] text-[color:var(--hero-muted)] md:text-xs">
+              {t.hero.role}
+            </span>
           </h1>
-          <p className="hero-fade mt-6 max-w-[48ch] text-lg leading-relaxed text-muted">{t.hero.sub}</p>
-          <div className="hero-fade mt-9 flex flex-wrap items-center gap-4">
-            <a
-              href="#work"
-              onClick={(e) => {
-                e.preventDefault();
-                scrollToId("work");
-              }}
-              className="toon-btn inline-flex h-12 items-center gap-2 whitespace-nowrap bg-accent px-6 text-base font-bold text-on-accent"
-            >
-              {t.hero.ctaWork}
-              <ArrowDownRight size={18} weight="bold" aria-hidden="true" />
-            </a>
-            <a
-              href="#contact"
-              onClick={(e) => {
-                e.preventDefault();
-                scrollToId("contact");
-              }}
-              className="toon-btn inline-flex h-12 items-center whitespace-nowrap bg-surface px-6 text-base font-bold text-ink"
-            >
-              {t.hero.ctaContact}
-            </a>
-          </div>
+          <p className="hero-in mt-5 inline-flex items-center gap-3 text-sm text-[color:var(--hero-muted)] lg:mt-8">
+            <span aria-hidden="true" className="hero-hint relative hidden h-7 w-16 lg:block">
+              <span className="absolute inset-x-1 bottom-1 flex justify-between">
+                <i className="size-1 rounded-full bg-current opacity-50" />
+                <i className="size-1 rounded-full bg-current opacity-50" />
+                <i className="size-1 rounded-full bg-current opacity-50" />
+              </span>
+              <Cursor size={18} weight="fill" className="hero-hint-cursor absolute left-1/2 top-0 -ml-2 text-[color:var(--hero-ink)]" />
+            </span>
+            <HandTap aria-hidden="true" size={18} weight="duotone" className="hero-hint-tap lg:hidden" />
+            <span className="hidden lg:inline">{t.hero.hint}</span>
+            <span className="lg:hidden">{t.hero.hintTouch}</span>
+          </p>
         </div>
 
-        {/* Personaje: arco tipo ventana pegado al borde inferior, con dos capas inclinadas detras */}
-        <div className="relative order-2 self-end md:order-1 md:col-span-5 md:col-start-1">
-          <div
+        {/* Personaje con la laptop: ancla visual del hero, pegado al borde inferior. En movil el frame
+            desborda un poco el ancho (sus bordes son transparentes) para que la laptop se vea grande. */}
+        <div className="hero-figure relative mt-4 aspect-[760/923] w-[min(112%,calc((100svh-15rem)*0.823))] self-center md:w-[min(92%,calc((100svh-16rem)*0.823))] lg:mx-auto lg:mt-auto lg:w-auto lg:h-[min(calc(100svh-5rem),58rem)]">
+          {/* Primer frame como poster mientras carga el canvas */}
+          <img
+            ref={posterRef}
+            src={frameSrc("idle", 0)}
+            alt=""
             aria-hidden="true"
-            style={{ transform: "rotate(-5deg)" }}
-            className="hero-arch-back absolute inset-x-2 bottom-0 top-10 origin-bottom rounded-t-[999px] border-2 border-b-0 border-outline bg-accent"
+            fetchPriority="high"
+            className="absolute inset-0 size-full select-none"
+            draggable={false}
           />
-          <div
-            aria-hidden="true"
-            style={{ transform: "rotate(4deg)" }}
-            className="hero-arch-mid toon-tint absolute inset-x-2 bottom-0 top-6 origin-bottom rounded-t-[999px] border-2 border-b-0 border-outline"
+          <canvas
+            ref={canvasRef}
+            width={FRAME.w}
+            height={FRAME.h}
+            role="img"
+            aria-label={t.hero.photoAlt}
+            className="absolute inset-0 size-full cursor-pointer"
           />
-          <div className="relative h-[62dvh] min-h-[22rem] overflow-hidden rounded-t-[999px] border-2 border-b-0 border-outline bg-surface md:h-[calc(100dvh-5rem)] md:max-h-[56rem]">
-            <div className="hero-photo-shift absolute inset-x-[-6%] bottom-[-6%] top-0">
-              <Image
-                src="/carlos-toon.png"
-                alt={t.hero.photoAlt}
-                fill
-                priority
-                sizes="(min-width: 768px) 44vw, 100vw"
-                className="hero-photo-img object-cover object-[50%_0%]"
-              />
-            </div>
-            <div aria-hidden="true" className="hero-photo-curtain absolute inset-0 origin-top bg-accent" />
+          <div ref={bubbleRef} aria-hidden="true" data-side="center" className="hero-bubble pointer-events-none absolute invisible opacity-0">
+            <span ref={bubbleText} />
           </div>
         </div>
       </div>
+      <div aria-hidden="true" className="hero-floor pointer-events-none absolute inset-x-0 bottom-0 -z-10 h-24" />
     </section>
   );
 }

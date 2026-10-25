@@ -6,12 +6,19 @@ export type Lang = "es" | "en";
 const es = {
   nav: { about: "Sobre mí", skills: "Servicios", career: "Trayectoria", work: "Proyectos", stack: "Stack", contact: "Contacto" },
   hero: {
-    eyebrow: "Carlos Barrera Acuña",
-    title: "Desarrollo plataformas web empresariales",
-    sub: "Ingeniero de Sistemas en Cartagena. Laravel, Next.js y PostgreSQL, con IA integrada en aplicativos reales.",
-    ctaWork: "Ver proyectos",
-    ctaContact: "Contacto",
-    photoAlt: "Ilustración de Carlos Barrera Acuña sonriendo en una oficina de desarrollo de software",
+    greeting: "Soy",
+    name: "Carlos Barrera",
+    role: "Desarrollador Full Stack",
+    hint: "Mueve el cursor para llamarme",
+    hintTouch: "Tócame para saludarte",
+    messages: {
+      left: "¿Hay alguien a la izquierda?",
+      right: "¿Hay alguien a la derecha?",
+      hey: "¡Hey, eres tú!",
+      hi: "¡Holaaa!",
+      check: "Mira mi portafolio",
+    },
+    photoAlt: "Ilustración de Carlos Barrera trabajando en su laptop con audífonos; saluda al visitante y señala el portafolio",
   },
   sections: {
     about: "Detrás del teclado",
@@ -98,12 +105,19 @@ export type Dict = typeof es;
 const en: Dict = {
   nav: { about: "About", skills: "Services", career: "Career", work: "Work", stack: "Stack", contact: "Contact" },
   hero: {
-    eyebrow: "Carlos Barrera Acuña",
-    title: "I build enterprise web platforms",
-    sub: "Systems Engineer in Cartagena. Laravel, Next.js and PostgreSQL, with AI built into real applications.",
-    ctaWork: "View projects",
-    ctaContact: "Contact",
-    photoAlt: "Illustration of Carlos Barrera Acuña smiling in a software development office",
+    greeting: "I'm",
+    name: "Carlos Barrera",
+    role: "Full Stack Developer",
+    hint: "Move cursor to call me!",
+    hintTouch: "Tap me to say hi",
+    messages: {
+      left: "Anyone here on the left?",
+      right: "Anyone here on the right?",
+      hey: "Hey, it's you!",
+      hi: "Hiiii!",
+      check: "Check out the portfolio",
+    },
+    photoAlt: "Illustration of Carlos Barrera working on his laptop with headphones; he waves at the visitor and points to the portfolio",
   },
   sections: {
     about: "Behind the keyboard",
